@@ -134,6 +134,7 @@ class TimeSeries:
 
         :param date: datetime object or string in ISO format
         """
+        # infer date from ISO format if not datetime object
         if not type(date) is datetime:
             try:
                 date = datetime.fromisoformat(date)
