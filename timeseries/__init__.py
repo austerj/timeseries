@@ -4,8 +4,13 @@ __docformat__ = 'restructuredtext'
 from timeseries.base import (
     TimeSeries,
 )
+
+from timeseries.io import (
+    read_csv,
+)
 __all__ = (
     'TimeSeries',
+    'read_csv',
 )
 
 

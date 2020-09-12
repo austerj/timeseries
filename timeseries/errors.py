@@ -4,19 +4,31 @@ class IteratorError(ValueError):
     """
 
 
-class InputDimensionError(ValueError):
+class InputDimensionError(IndexError):
     """
     Error raised when creating time series without matching input dimensions.
     """
 
 
-class DateError(ValueError):
+class DateError(TypeError):
     """
     Error raised when creating time series with non-datetime or duplicate keys.
     """
 
 
-class NumericValueError(ValueError):
+class NumericValueError(TypeError):
     """
     Error raised when creating time series with non-numeric values.
+    """
+
+
+class CSVDateError(TypeError):
+    """
+    Error raised when unable to convert CSV dates to datetime objects.
+    """
+
+
+class CSVLoadError(RuntimeError):
+    """
+    Error raised when unable to load CSV file.
     """
