@@ -104,3 +104,25 @@ def read_csv(
         raise CSVLoadError('reading CSV file failed')
     tseries = ts.TimeSeries(dates, values)
     return tseries
+
+
+def to_csv(
+    tseries,
+    filepath,
+    date_column='times',
+    value_column='values',
+    to_string=None,
+    **kwargs,
+):
+    """
+    Write time series to CSV file.
+
+    :param tseries: time series object
+    :param filepath: path of output file
+    :param date_column: date column string, defaults to 'times'
+    :param value_column: value column string, defaults to 'values'
+    :param to_string: date format string or explicit function for string
+        conversion, defaults to days since UNIX epoch
+    :param '**kwargs': optional keyword arguments passed to DictWriter
+    """
+    raise NotImplementedError()

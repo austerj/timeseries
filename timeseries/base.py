@@ -1,10 +1,10 @@
 from datetime import datetime
 
 from timeseries.errors import (
-        DateError,
-        NumericValueError,
-        InputDimensionError,
-        IteratorError,
+    DateError,
+    NumericValueError,
+    InputDimensionError,
+    IteratorError,
 )
 
 
@@ -156,3 +156,25 @@ class TimeSeries:
         except KeyError:
             raise KeyError(f'{date.isoformat()} not found in time series')
         return date_value
+
+    def to_csv(self, filepath, **kwargs):
+        """
+        Write time series to CSV file.
+
+        :param filepath: path of output file
+        :param date_column: date column string, defaults to 'times'
+        :param value_column: value column string, defaults to 'values'
+        :param to_string: date format string or explicit function for string
+            conversion, defaults to days since UNIX epoch
+        :param '**kwargs': optional keyword arguments passed to DictWriter
+        """
+        from timeseries.io import to_csv
+        to_csv(
+            self,
+            filepath,
+            date_column='times',
+            value_column='values',
+            to_string=None,
+            **kwargs,
+        )
+        return None
