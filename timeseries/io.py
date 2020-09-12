@@ -6,10 +6,9 @@ from datetime import (
     timezone,
 )
 
-import timeseries as ts
 from timeseries.errors import (
-        CSVLoadError,
-        CSVDateError,
+    CSVLoadError,
+    CSVDateError,
 )
 
 
@@ -51,6 +50,7 @@ def read_csv(
     1970-01-02 00:00:00              2.00
     1970-01-03 00:00:00              3.00
     """
+    from timeseries.base import TimeSeries
     # default datetime conversion using offset days from epoch
     if not to_datetime:
         unix_epoch = datetime(1970, 1, 1, tzinfo=timezone.utc)
@@ -102,7 +102,7 @@ def read_csv(
                 values.append(value)
     except Exception:
         raise CSVLoadError('reading CSV file failed')
-    tseries = ts.TimeSeries(dates, values)
+    tseries = TimeSeries(dates, values)
     return tseries
 
 
