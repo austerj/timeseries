@@ -44,6 +44,12 @@ def read_csv(
     1970-01-01 00:00:00              1.00
     1970-01-02 00:00:00              2.00
     1970-01-03 00:00:00              3.00
+
+    >>> ts.read_csv(ts.samples_path + 'epoch_semicolon.csv', delimiter=';')
+    date                            value
+    1970-01-01 00:00:00              1.00
+    1970-01-02 00:00:00              2.00
+    1970-01-03 00:00:00              3.00
     """
     # default datetime conversion using offset days from epoch
     if not to_datetime:
