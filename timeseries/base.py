@@ -50,20 +50,31 @@ class TimeSeries:
         """
         Initialize time series object.
 
-        :param dates: iterable of datetime objects
-        :param values: iterable of valid floating-point numbers
+        :param dates: finite-length iterable of datetime objects
+        :param values: finite-length iterable of float-convertable numbers
         """
+        # note: _ prefix indicates internal use, but user could theoretically
+        # still directly access and modify / break this
         self._data = self._load_data(dates, values)
 
     def __repr__(self):
         """
         Return string representation of time series object.
         """
-        header = '{:<19} {:>17}\n'.format('date', 'value')
+        # use explicit 'YYYY-MM-DD HH:MM:SS' format for consistency
+        date_format = r'%Y-%m-%d %H:%M:%S'
         data = []
         for date, value in self._data.items():
-            data.append('{} {:>17.2f}'.format(date, value))
-        return header + '\n'.join(data)
+            date_string = date.strftime(date_format)
+            data.append('{} {:>17.2f}'.format(date_string, value))
+        # use length of last date string to determine padding for header
+        header = '{date_header:<{width}} {value_header:>17}\n'.format(
+            date_header='date',
+            value_header='value',
+            width=len(date_string),
+        )
+        repr_string = header + '\n'.join(data)
+        return repr_string
 
     def __len__(self):
         """
