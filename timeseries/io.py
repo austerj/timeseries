@@ -29,6 +29,21 @@ def read_csv(
     :param to_datetime: date format string or explicit function for datetime
         conversion, defaults to days since UNIX epoch
     :param '**kwargs': optional keyword arguments passed to DictReader
+
+    :example:
+    >>> import timeseries as ts
+
+    >>> ts.read_csv(ts.samples + 'epoch.csv')
+    date                            value
+    1970-01-01 00:00:00              1.00
+    1970-01-02 00:00:00              2.00
+    1970-01-03 00:00:00              3.00
+
+    >>> ts.read_csv(ts.samples + 'iso.csv', to_datetime='%Y-%m-%d')
+    date                            value
+    1970-01-01 00:00:00              1.00
+    1970-01-02 00:00:00              2.00
+    1970-01-03 00:00:00              3.00
     """
     # default datetime conversion using offset days from epoch
     if not to_datetime:
