@@ -131,9 +131,9 @@ class TimeSeries:
         for value in values:
             try:
                 flt_values.append(float(value))
-            except ValueError as e:
+            except ValueError:
                 raise NumericValueError(
-                    f'{e.args[0]}, all values must be convertable to floats')
+                    'all values must be convertable to floats')
         # store date-value pairs as dict sorted chronologically by date
         # note: SortedDict is more elegant but depends on third-party module
         data = {date: value for date, value in sorted(zip(dates, flt_values))}
@@ -149,8 +149,8 @@ class TimeSeries:
         if not type(date) is datetime:
             try:
                 date = datetime.fromisoformat(date)
-            except ValueError as e:
-                raise DateError(e.args[0])
+            except ValueError:
+                raise DateError('date inferral from string failed')
         try:
             date_value = self._data[date]
         except KeyError:
