@@ -1,4 +1,4 @@
-import unittest
+from unittest import TestCase
 from datetime import datetime
 from itertools import count
 
@@ -8,12 +8,14 @@ from timeseries.errors import (
         NumericValueError,
         InputDimensionError,
         IteratorError,
+        CSVLoadError,
+        CSVDateError,
 )
 
 
-class TestExceptionHandling(unittest.TestCase):
+class TestTimeSeriesExceptionHandling(TestCase):
     """
-    Test that TimeSeries methods raise expected exceptions.
+    Test that core TimeSeries methods raise expected exceptions.
     """
     def setUp(self):
         """
@@ -37,7 +39,7 @@ class TestExceptionHandling(unittest.TestCase):
             self.values[0],
         )
 
-    def test_nonlen_input(self):
+    def test_nolen_input(self):
         """
         Test that non-terminating generator inputs raise IteratorError.
         """
@@ -48,7 +50,7 @@ class TestExceptionHandling(unittest.TestCase):
             count(),
         )
 
-    def test_dimensionmismatch_input(self):
+    def test_dimension_mismatch_input(self):
         """
         Test that dimension-mismatched inputs raise InputDimensionError.
         """
@@ -101,4 +103,55 @@ class TestExceptionHandling(unittest.TestCase):
             DateError,
             self.tseries.get_value,
             invalid_iso,
+        )
+
+
+class TestCSVExceptionHandling(TestCase):
+    """
+    Test that CSV functions and methods raise expected exceptions.
+    """
+    def test_nonfloat_offset(self):
+        """
+        Test that non-float offset from UNIX epoch raises CSVLoadError.
+        """
+        self.assertRaises(
+            CSVLoadError,
+            ts.read_csv,
+            ts.samples_path + 'iso.csv',
+        )
+
+    def test_dateformat_mismatch(self):
+        """
+        Test that using a mismatched data format raises CSVLoadError.
+        """
+        mismatch_format = '%Y-%m-%d'
+        self.assertRaises(
+            CSVLoadError,
+            ts.read_csv,
+            ts.samples_path + 'epoch.csv',
+            to_datetime=mismatch_format,
+        )
+
+    def test_noncallable_nonstr_dateformat(self):
+        """
+        Test that non-callable non-str date format raises CSVDateError.
+        """
+        invalid_format = 42
+        self.assertRaises(
+            CSVDateError,
+            ts.read_csv,
+            ts.samples_path + 'epoch.csv',
+            to_datetime=invalid_format,
+        )
+
+    def test_column_mismatch(self):
+        """
+        Test that mismatched column name raises CSVLoadError.
+        """
+        mismatch_date_column = 'not_times'
+        self.assertRaises(
+            CSVLoadError,
+            ts.read_csv,
+            ts.samples_path + 'epoch.csv',
+            date_column=mismatch_date_column,
         )

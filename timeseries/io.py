@@ -33,13 +33,13 @@ def read_csv(
     :example:
     >>> import timeseries as ts
 
-    >>> ts.read_csv(ts.samples + 'epoch.csv')
+    >>> ts.read_csv(ts.samples_path + 'epoch.csv')
     date                            value
     1970-01-01 00:00:00              1.00
     1970-01-02 00:00:00              2.00
     1970-01-03 00:00:00              3.00
 
-    >>> ts.read_csv(ts.samples + 'iso.csv', to_datetime='%Y-%m-%d')
+    >>> ts.read_csv(ts.samples_path + 'iso.csv', to_datetime='%Y-%m-%d')
     date                            value
     1970-01-01 00:00:00              1.00
     1970-01-02 00:00:00              2.00

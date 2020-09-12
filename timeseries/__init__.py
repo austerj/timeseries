@@ -2,7 +2,7 @@ __docformat__ = 'restructuredtext'
 __all__ = (
     'TimeSeries',
     'read_csv',
-    'samples',
+    'samples_path',
 )
 
 import os
@@ -16,9 +16,10 @@ from timeseries.io import (
     read_csv,
 )
 
-# define path to sample data
-package_path = os.path.join(os.getcwd(), 'timeseries')
-samples = os.path.join(package_path, 'samples', '')
+# define path to package and sample data
+package_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '')
+samples_path = os.path.join(package_path, 'samples', '')
+
 
 # load all relevant tests during unittest discovery
 def load_tests(loader, tests, ignore):
