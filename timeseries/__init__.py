@@ -8,17 +8,15 @@ __all__ = (
     'TimeSeries',
 )
 
-# submodules containing doctests
-import timeseries as ts
-
-doctest_modules = (
-    ts.base,
-)
-
 
 # load all relevant tests during unittest discovery
 def load_tests(loader, tests, ignore):
+    # submodules containing doctests
     import doctest
+    import timeseries as ts
+    doctest_modules = (
+        ts.base,
+    )
     # doctests are used to test basic functionality with valid inputs
     for submodule in doctest_modules:
         tests.addTest(doctest.DocTestSuite(submodule))
