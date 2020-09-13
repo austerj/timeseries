@@ -4,13 +4,13 @@ from itertools import count
 
 import timeseries as ts
 from timeseries.errors import (
-        DateError,
-        NumericValueError,
-        InputDimensionError,
-        IteratorError,
-        CSVLoadError,
-        CSVDateError,
-        WeightsError,
+    DateError,
+    NumericValueError,
+    InputDimensionError,
+    IteratorError,
+    CSVLoadError,
+    CSVDateError,
+    WeightsError,
 )
 
 
@@ -104,6 +104,28 @@ class TestTimeSeriesExceptionHandling(TestCase):
             DateError,
             self.tseries.get_value,
             invalid_iso,
+        )
+
+    def test_nonimplemented_access(self):
+        """
+        Test that non-implemented access method raises IndexError.
+        """
+        invalid_access = 1.1
+        self.assertRaises(
+            IndexError,
+            self.tseries.__getitem__,
+            invalid_access,
+        )
+
+    def test_outofrange_access(self):
+        """
+        Test that out-of-range access raises IndexError.
+        """
+        invalid_access = 10
+        self.assertRaises(
+            IndexError,
+            self.tseries.__getitem__,
+            invalid_access,
         )
 
 

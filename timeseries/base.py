@@ -107,6 +107,7 @@ class TimeSeries:
         # use explicit 'YYYY-MM-DD HH:MM:SS' format for consistency
         date_format = r'%Y-%m-%d %H:%M:%S'
         data = []
+        date_string = ''
         for date, value in self._data.items():
             date_string = date.strftime(date_format)
             data.append('{} {:>17.2f}'.format(date_string, value))
@@ -146,7 +147,7 @@ class TimeSeries:
                 values = (self.get_value(date),)
             elif hasattr(key, '__iter__'):
                 dates, values = list(), list()
-                # multi-element access from iterable of integers 
+                # multi-element access from iterable of integers
                 if all(isinstance(item, int) for item in key):
                     for item in key:
                         date = self.dates[item]
