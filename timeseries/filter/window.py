@@ -11,6 +11,8 @@ from timeseries.filter.weights import (
 )
 
 from timeseries.filter.func import (
+    WindowFunction,
+    SeriesFunction,
     CustomWindowFunction,
     SumWindow,
 )
@@ -101,13 +103,13 @@ class RollingWindow:
                 f'{window_func} is not a valid choice of windowed function')
         _window_func = self._WINDOWFUNCS[window_func](**kwargs)
         # skip rolling window if window function returns values directly
-        if not _window_func.rolling:
+        if isinstance(_window_func, SeriesFunction):
             if self._weights_key != 'none':
                 warnings.warn(
                     'function computes values directly, weights are not used')
             dates = self._tseries.dates
-            values = _window_func.apply_to_window(ts_values)
-        else:
+            values = _window_func.apply_to_series(ts_values)
+        elif isinstance(_window_func, WindowFunction):
             # initialize weights and dates
             weights = self.get_weights()
             dates = self._tseries.dates[self.window_size-1:]
@@ -124,6 +126,9 @@ class RollingWindow:
                 # this could often be optimized by using caching / update rules
                 value = _window_func.apply_to_window(weighted_values)
                 values.append(value)
+        else:
+            raise TypeError(
+                '_window_func must subclass WindowFunction or SeriesFunction')
         tseries = TimeSeries(dates, values)
         return tseries
 

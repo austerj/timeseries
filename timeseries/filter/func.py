@@ -5,25 +5,29 @@ class WindowFunction(ABC):
     """
     Abstract class for applying function in window.
     """
-    def __init__(self, rolling=True, *args, **kwargs):
-        # flag for rolling windows - set to False if window function returns
-        # full series of values directly, e.g. for exponential MA
-        self.rolling = True
-
     @abstractmethod
     def apply_to_window(self, values):
         pass
 
 
+class SeriesFunction(ABC):
+    """
+    Abstract class for applying function to whole series.
+    """
+    @abstractmethod
+    def apply_to_series(self, values):
+        pass
+
+
 class CustomWindowFunction(WindowFunction):
     """
-    Apply custom function to window.
+    Apply custom function in window.
     """
     def __init__(self, func):
         """
         Initialize custom window function.
 
-        :param func: function to apply to window
+        :param func: function to apply in window
         """
         super().__init__()
         self.func = func
@@ -38,7 +42,7 @@ class CustomWindowFunction(WindowFunction):
         return func_values
 
 
-class SumWindow(WindowFunction):
+class SumWindow(CustomWindowFunction):
     """
     Sum over values in window.
     """
@@ -46,13 +50,5 @@ class SumWindow(WindowFunction):
         """
         Initialize sum window function.
         """
-        super().__init__()
-
-    def apply_to_window(self, values):
-        """
-        Return sum of values in window.
-
-        :param values: values to apply function to
-        """
-        sum_values = sum(values)
-        return sum_values
+        def sum_func(x): return sum(x)
+        super().__init__(sum_func)
