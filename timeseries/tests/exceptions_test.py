@@ -10,6 +10,7 @@ from timeseries.errors import (
         IteratorError,
         CSVLoadError,
         CSVDateError,
+        WeightsError,
 )
 
 
@@ -154,4 +155,31 @@ class TestCSVExceptionHandling(TestCase):
             ts.read_csv,
             ts.samples_path + 'epoch.csv',
             date_column=mismatch_date_column,
+        )
+
+
+class TestFilteringExceptionHandling(TestCase):
+    """
+    Test that filtering raises expected exceptions.
+    """
+    def test_negative_min_weight(self):
+        """
+        Test that minimum weight below 0 in LinearWeights raises WeightsError.
+        """
+        negative_min_weight = -0.1
+        self.assertRaises(
+            WeightsError,
+            ts.filter.weights.LinearWeights,
+            negative_min_weight,
+        )
+
+    def test_greater_than_one_min_weight(self):
+        """
+        Test that minimum weight above 1 in LinearWeights raises WeightsError.
+        """
+        greater_than_one_min_weight = 1.1
+        self.assertRaises(
+            WeightsError,
+            ts.filter.weights.LinearWeights,
+            greater_than_one_min_weight,
         )

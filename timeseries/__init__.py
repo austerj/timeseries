@@ -7,7 +7,8 @@ __all__ = (
 
 import os
 
-# submodules to include on import
+# components to include on import
+import timeseries.filter
 from timeseries.base import (
     TimeSeries,
 )
@@ -23,12 +24,13 @@ samples_path = os.path.join(package_path, 'samples', '')
 
 # load all relevant tests during unittest discovery
 def load_tests(loader, tests, ignore):
-    # submodules containing doctests
+    # modules containing doctests
     import doctest
     import timeseries as ts
     doctest_modules = (
         ts.base,
         ts.io,
+        ts.filter.weights,
     )
     # doctests are used to test basic functionality with valid inputs
     for submodule in doctest_modules:
