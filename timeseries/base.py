@@ -7,6 +7,11 @@ from timeseries.errors import (
     IteratorError,
 )
 
+from timeseries.stats import (
+    mean,
+    variance,
+)
+
 
 class TimeSeries:
     """
@@ -89,9 +94,16 @@ class TimeSeries:
     1970-01-02 00:00:00              2.00
     1970-01-03 00:00:00              3.00
 
-    Basic filtering returning transformed time series can be directly called by
-    various methods. Support includes simple moving averages and rolling
-    variance.
+    Simple statistics can be computed from mean and variance methods.
+
+    >>> tseries.mean()
+    2.0
+
+    >>> tseries.variance()
+    1.0
+
+    Basic filtering can be executed by direct calls to various methods. Support
+    includes simple moving averages and rolling variance.
 
     >>> tseries.moving_average(window_size=2)
     date                            value
@@ -103,9 +115,9 @@ class TimeSeries:
     1970-01-02 00:00:00              0.50
     1970-01-03 00:00:00              0.50
 
-    Advanced filtering methods can be accessed via the rolling method, which
-    provides an interface to customizable rolling window functionality,
-    including variable weighting of values.
+    More advanced filtering methods can be accessed via the rolling method,
+    which provides an interface to customizable rolling window functionality,
+    including variable weighting of values and custom functions.
 
     >>> tseries.rolling(2, weights='none').get_weights()
     [1, 1]
@@ -329,6 +341,18 @@ class TimeSeries:
         )
         return None
 
+    def mean(self):
+        """
+        Return sample mean of time series.
+        """
+        return mean(self.values)
+
+    def variance(self):
+        """
+        Return sample variance of time series.
+        """
+        return variance(self.values)
+
     def rolling(self, window_size, weights='even', **kwargs):
         """
         Return rolling window object for customizable filtering.
@@ -357,5 +381,4 @@ class TimeSeries:
 
         :param window_size: integer size of rolling window
         """
-        from timeseries.stats import variance
         return self.rolling(window_size, weights='none').custom(variance)
