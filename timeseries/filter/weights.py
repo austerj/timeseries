@@ -60,7 +60,7 @@ class LinearWeights(Weights):
 
         :param min_weight: minimum weight to apply
         """
-        if min_weight < 0 or min_weight > 1:
+        if min_weight <= 0 or min_weight >= 1:
             raise WeightsError('use minimum weight between 0 and 1')
         self.min_weight = min_weight
 
