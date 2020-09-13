@@ -4,12 +4,13 @@ from itertools import count
 
 import timeseries as ts
 from timeseries.errors import (
-        DateError,
-        NumericValueError,
-        InputDimensionError,
-        IteratorError,
-        CSVLoadError,
-        CSVDateError,
+    DateError,
+    NumericValueError,
+    InputDimensionError,
+    IteratorError,
+    CSVLoadError,
+    CSVDateError,
+    WeightsError,
 )
 
 
@@ -105,6 +106,28 @@ class TestTimeSeriesExceptionHandling(TestCase):
             invalid_iso,
         )
 
+    def test_nonimplemented_access(self):
+        """
+        Test that non-implemented access method raises IndexError.
+        """
+        invalid_access = 1.1
+        self.assertRaises(
+            IndexError,
+            self.tseries.__getitem__,
+            invalid_access,
+        )
+
+    def test_outofrange_access(self):
+        """
+        Test that out-of-range access raises IndexError.
+        """
+        invalid_access = 10
+        self.assertRaises(
+            IndexError,
+            self.tseries.__getitem__,
+            invalid_access,
+        )
+
 
 class TestCSVExceptionHandling(TestCase):
     """
@@ -154,4 +177,31 @@ class TestCSVExceptionHandling(TestCase):
             ts.read_csv,
             ts.samples_path + 'epoch.csv',
             date_column=mismatch_date_column,
+        )
+
+
+class TestFilteringExceptionHandling(TestCase):
+    """
+    Test that filtering raises expected exceptions.
+    """
+    def test_negative_min_weight(self):
+        """
+        Test that minimum weight below 0 in LinearWeights raises WeightsError.
+        """
+        negative_min_weight = -0.1
+        self.assertRaises(
+            WeightsError,
+            ts.filter.weights.LinearWeights,
+            negative_min_weight,
+        )
+
+    def test_greater_than_one_min_weight(self):
+        """
+        Test that minimum weight above 1 in LinearWeights raises WeightsError.
+        """
+        greater_than_one_min_weight = 1.1
+        self.assertRaises(
+            WeightsError,
+            ts.filter.weights.LinearWeights,
+            greater_than_one_min_weight,
         )

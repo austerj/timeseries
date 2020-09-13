@@ -24,6 +24,10 @@ class TimeSeries:
     >>> values = (2, 1, 3)
     >>> tseries = ts.TimeSeries(dates, values)
 
+    The time series is automatically ordered by dates with the earliest entry
+    on top and the latest entry at the bottom. Various attributes allow for
+    inspection of the data contained in the time series.
+
     >>> tseries
     date                            value
     1970-01-01 00:00:00              1.00
@@ -39,11 +43,50 @@ class TimeSeries:
     >>> tseries.values
     (1.0, 2.0, 3.0)
 
+    The get_value method can be called explicitly to retrieve the value at the
+    provided date (either ISO-format or a datetime object).
+
     >>> tseries.get_value(date2)
     2.0
 
     >>> tseries.get_value('1970-01-02')
     2.0
+
+    Multiple options are available for slicing and subsetting an existing time
+    series object. The time series can be sliced by the positional indices of
+    entries like a list and single-element time series can be created from
+    integer, datetime or string keys. Chronological order is maintained
+    regardless of the order of the key.
+
+    >>> tseries[0::2]
+    date                            value
+    1970-01-01 00:00:00              1.00
+    1970-01-03 00:00:00              3.00
+
+    >>> tseries[0]
+    date                            value
+    1970-01-01 00:00:00              1.00
+
+    >>> tseries[date3]
+    date                            value
+    1970-01-03 00:00:00              3.00
+
+    >>> tseries['1970-01-03']
+    date                            value
+    1970-01-03 00:00:00              3.00
+
+    Subsetting by iterables of positinal indices, datetimes or strings is also
+    supported.
+
+    >>> tseries[[1,0]]
+    date                            value
+    1970-01-01 00:00:00              1.00
+    1970-01-02 00:00:00              2.00
+
+    >>> tseries[['1970-01-03', '1970-01-02']]
+    date                            value
+    1970-01-02 00:00:00              2.00
+    1970-01-03 00:00:00              3.00
     """
 
     def __init__(self, dates, values):
@@ -64,6 +107,7 @@ class TimeSeries:
         # use explicit 'YYYY-MM-DD HH:MM:SS' format for consistency
         date_format = r'%Y-%m-%d %H:%M:%S'
         data = []
+        date_string = ''
         for date, value in self._data.items():
             date_string = date.strftime(date_format)
             data.append('{} {:>17.2f}'.format(date_string, value))
@@ -81,6 +125,47 @@ class TimeSeries:
         Return number of entries in time series.
         """
         return len(self._data)
+
+    def __getitem__(self, key):
+        """
+        Return time series object indexed from key.
+        """
+        try:
+            # use existing slice implementation for dates and values
+            if isinstance(key, slice):
+                dates = self.dates[key]
+                values = self.values[key]
+            # single-element access from integer position
+            elif isinstance(key, int):
+                date = self.dates[key]
+                dates = (date,)
+                values = (self.get_value(date),)
+            # single-element access with get_value method
+            elif isinstance(key, datetime) or isinstance(key, str):
+                date = self._infer_date(key)
+                dates = (date,)
+                values = (self.get_value(date),)
+            elif hasattr(key, '__iter__'):
+                dates, values = list(), list()
+                # multi-element access from iterable of integers
+                if all(isinstance(item, int) for item in key):
+                    for item in key:
+                        date = self.dates[item]
+                        dates.append(date)
+                        values.append(self.get_value(date))
+                else:
+                    # last-resort: attempt iteration with get_value method
+                    for item in key:
+                        date = self._infer_date(item)
+                        dates.append(date)
+                        values.append(self.get_value(date))
+            else:
+                raise NotImplementedError(
+                    f'cannot infer keys from \'{key}\'')
+            # can be optimized - input validation in constructor is redundant
+            return TimeSeries(dates, values)
+        except Exception:
+            raise IndexError('accessing time series elements failed')
 
     @property
     def dates(self):
@@ -104,7 +189,8 @@ class TimeSeries:
         """
         return tuple(self._data.values())
 
-    def _load_data(self, dates, values):
+    @staticmethod
+    def _load_data(dates, values):
         """
         Validate inputs and return sorted date-value pairs as dict.
 
@@ -139,9 +225,10 @@ class TimeSeries:
         data = {date: value for date, value in sorted(zip(dates, flt_values))}
         return data
 
-    def get_value(self, date):
+    @staticmethod
+    def _infer_date(date):
         """
-        Return value of time series at specified date.
+        Return inferred datetime object.
 
         :param date: datetime object or string in ISO format
         """
@@ -150,10 +237,20 @@ class TimeSeries:
             try:
                 date = datetime.fromisoformat(date)
             except ValueError:
-                raise DateError('date inferral from string failed')
+                raise DateError(f'date inferral from \'{date}\' failed')
+        return date
+
+    def get_value(self, date):
+        """
+        Return value of time series at specified date.
+
+        :param date: datetime object or string in ISO format
+        """
+        # infer date from ISO format if not datetime object
+        date = self._infer_date(date)
         try:
             date_value = self._data[date]
-        except KeyError:
+        except Exception:
             raise KeyError(f'{date.isoformat()} not found in time series')
         return date_value
 

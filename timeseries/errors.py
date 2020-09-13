@@ -32,3 +32,9 @@ class CSVLoadError(RuntimeError):
     """
     Error raised when unable to load CSV file.
     """
+
+
+class WeightsError(ValueError):
+    """
+    Error raised when providing invalid parameters to weights.
+    """
