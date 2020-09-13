@@ -42,6 +42,7 @@ def load_tests(loader, tests, ignore):
         ts.base,
         ts.io,
         ts.filter.weights,
+        ts.stats,
     )
     # doctests are used to test basic functionality with valid inputs
     for submodule in doctest_modules:

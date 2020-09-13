@@ -3,6 +3,13 @@ def mean(values):
     Return the sample mean of a numeric iterable.
 
     :param values: finite-length iterable of float-convertable numbers
+
+    :example:
+    >>> import timeseries as ts
+
+    >>> values = (1, 2, 3)
+    >>> ts.stats.mean(values)
+    2.0
     """
     sample_mean = sum(values) / len(values)
     return sample_mean
@@ -13,6 +20,13 @@ def variance(values):
     Return the unbiased sample variance of a numeric iterable.
 
     :param values: finite-length iterable of float-convertable numbers
+
+    :example:
+    >>> import timeseries as ts
+
+    >>> values = (1, 2, 3)
+    >>> ts.stats.variance(values)
+    1.0
     """
     sample_mean = mean(values)
     squared_deviations = [(value-sample_mean)**2 for value in values]
@@ -29,6 +43,14 @@ def crosscovariance(values1, values2):
 
     :param values1: finite-length iterable of float-convertable numbers
     :param values2: finite-length iterable of float-convertable numbers
+
+    :example:
+    >>> import timeseries as ts
+
+    >>> values1 = (1, 2, 3)
+    >>> values2 = (-2, -4, -6)
+    >>> ts.stats.crosscovariance(values1, values2)
+    -2.0
     """
     sample_mean1 = mean(values1)
     sample_mean2 = mean(values2)
@@ -47,6 +69,14 @@ def crosscorrelation(values1, values2):
 
     :param values1: finite-length iterable of float-convertable numbers
     :param values2: finite-length iterable of float-convertable numbers
+
+    :example:
+    >>> import timeseries as ts
+
+    >>> values1 = (1, 2, 3)
+    >>> values2 = (-2, -4, -6)
+    >>> ts.stats.crosscorrelation(values1, values2)
+    -1.0
     """
     sample_variance1 = variance(values1)
     sample_variance2 = variance(values2)
