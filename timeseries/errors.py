@@ -38,3 +38,9 @@ class WeightsError(ValueError):
     """
     Error raised when providing invalid parameters to weights.
     """
+
+
+class FilteringWindowError(ValueError):
+    """
+    Error raised when applying filter in a window larger than the time series.
+    """

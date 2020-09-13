@@ -1,5 +1,9 @@
 import warnings
 
+from timeseries.errors import (
+    FilteringWindowError,
+)
+
 from timeseries.filter.weights import (
     EvenWeights,
     LinearWeights,
@@ -71,7 +75,7 @@ class RollingWindow:
         if not flt_value.is_integer():
             raise ValueError('window size must be integer')
         if not flt_value <= len(self._tseries):
-            raise ValueError(
+            raise FilteringWindowError(
                 'window size must be smaller than length of time series')
         if not flt_value > 0:
             raise ValueError(
