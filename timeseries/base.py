@@ -126,6 +126,19 @@ class TimeSeries:
         """
         return len(self._data)
 
+    def __eq__(self, other):
+        """
+        Return True if other time series has the same dates and values.
+
+        :param other: time series object to assess equality against
+        """
+        if isinstance(other, TimeSeries):
+            equals = self.dates == other.dates and self.values == other.values
+        else:
+            raise NotImplementedError(
+                f'cannot assess equality against {type(other)}')
+        return equals
+
     def __getitem__(self, key):
         """
         Return time series object indexed from key.
