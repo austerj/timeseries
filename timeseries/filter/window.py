@@ -130,7 +130,7 @@ class RollingWindow:
 
         :param func: custom function to apply in rolling windows
         """
-        return self._apply_filter('custom', func)
+        return self._apply_filter('custom', func=func)
 
     def sum(self):
         """

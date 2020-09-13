@@ -45,7 +45,7 @@ class TimeSeries:
     (1.0, 2.0, 3.0)
 
     The get_value method can be called explicitly to retrieve the value at the
-    provided date (either ISO-format or a datetime object).
+    provided date (either ISO format or a datetime object).
 
     >>> tseries.get_value(date2)
     2.0
@@ -76,7 +76,7 @@ class TimeSeries:
     date                            value
     1970-01-03 00:00:00              3.00
 
-    Subsetting by iterables of positinal indices, datetimes or strings is also
+    Subsetting by iterables of positional indices, datetimes or strings is also
     supported.
 
     >>> tseries[[1,0]]
@@ -88,6 +88,45 @@ class TimeSeries:
     date                            value
     1970-01-02 00:00:00              2.00
     1970-01-03 00:00:00              3.00
+
+    Basic filtering returning transformed time series can be directly called by
+    various methods. Support includes simple moving averages and rolling
+    variance.
+
+    >>> tseries.moving_average(window_size=2)
+    date                            value
+    1970-01-02 00:00:00              1.50
+    1970-01-03 00:00:00              2.50
+
+    >>> tseries.rolling_variance(2)
+    date                            value
+    1970-01-02 00:00:00              0.50
+    1970-01-03 00:00:00              0.50
+
+    Advanced filtering methods can be accessed via the rolling method, which
+    provides an interface to customizable rolling window functionality,
+    including variable weighting of values.
+
+    >>> tseries.rolling(2, weights='none').get_weights()
+    [1, 1]
+
+    >>> tseries.rolling(2, weights='none').custom(ts.stats.variance)
+    date                            value
+    1970-01-02 00:00:00              0.50
+    1970-01-03 00:00:00              0.50
+
+    >>> tseries.rolling(2, weights='none').sum()
+    date                            value
+    1970-01-02 00:00:00              3.00
+    1970-01-03 00:00:00              5.00
+
+    >>> tseries.rolling(2, weights='linear', min_weight=0.2).get_weights()
+    [0.2, 0.8]
+
+    >>> tseries.rolling(2, weights='linear', min_weight=0.2).sum()
+    date                            value
+    1970-01-02 00:00:00              1.80
+    1970-01-03 00:00:00              2.80
     """
 
     def __init__(self, dates, values):
@@ -289,3 +328,34 @@ class TimeSeries:
             **kwargs,
         )
         return None
+
+    def rolling(self, window_size, weights='even', **kwargs):
+        """
+        Return rolling window object for customizable filtering.
+
+        :param window_size: integer size of rolling window
+        :param weights: type of weights, defaults to 'even'. Current options:
+            'even' - all points weighted evenly
+            'linear' - weights increasing linearly from 'min_weight' parameter
+            'none' - no weighting
+        :param '**kwargs': keyword arguments passed to weights as parameters
+        """
+        from timeseries.filter.window import RollingWindow
+        return RollingWindow(self, window_size, weights, **kwargs)
+
+    def moving_average(self, window_size):
+        """
+        Return moving average.
+
+        :param window_size: integer size of rolling window
+        """
+        return self.rolling(window_size, weights='even').sum()
+
+    def rolling_variance(self, window_size):
+        """
+        Return rolling sample variance.
+
+        :param window_size: integer size of rolling window
+        """
+        from timeseries.stats import variance
+        return self.rolling(window_size, weights='none').custom(variance)
