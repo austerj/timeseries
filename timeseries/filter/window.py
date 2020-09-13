@@ -1,25 +1,43 @@
+import warnings
+
 from timeseries.filter.weights import (
     EvenWeights,
     LinearWeights,
+    NoneWeights,
+)
+
+from timeseries.filter.func import (
+    CustomWindowFunction,
+    SumWindow,
 )
 
 
 class RollingWindow:
+    """
+    Rolling window class for applying filters to time series.
+    """
     # map keys to weight classes
     _WEIGHTS = {
         'even': EvenWeights,
         'linear': LinearWeights,
+        'none': NoneWeights,
+    }
+    # map keys to window function classes
+    _WINDOWFUNCS = {
+        'custom': CustomWindowFunction,
+        'sum': SumWindow,
     }
 
     def __init__(self, tseries, window_size, weights='even', **kwargs):
         """
-        Rolling window class for applying filters to time series.
+        Initialize rolling window object.
 
         :param tseries: time series object
         :param window_size: integer size of rolling window
         :param weights: type of weights, defaults to 'even'. Current options:
             'even' - all points weighted evenly
             'linear' - weights increasing linearly from 'min_weight' parameter
+            'none' - no weighting
         :param '**kwargs': keyword arguments passed to weights as parameters
         """
         # check that specified weights are implemented
@@ -62,3 +80,60 @@ class RollingWindow:
 
     def get_weights(self):
         return self._weights.get_weights(self.window_size)
+
+    def _apply_filter(self, window_func, **kwargs):
+        """
+        Apply filter and return time series.
+
+        :param window_func: windowed function to apply. Current options:
+            'average' - weighted moving average over window size
+        :param '**kwargs': keyword arguments passed to window function
+        """
+        from timeseries import TimeSeries
+        ts_values = self._tseries.values
+        # check that specified windowed function is implemented
+        if window_func not in self._WINDOWFUNCS.keys():
+            raise KeyError(
+                f'{window_func} is not a valid choice of windowed function')
+        _window_func = self._WINDOWFUNCS[window_func](**kwargs)
+        # skip rolling window if window function returns values directly
+        if not _window_func.rolling:
+            if self._weights_key != 'none':
+                warnings.warn(
+                    'function computes values directly, weights are not used')
+            dates = self._tseries.dates
+            values = _window_func.apply_to_window(ts_values)
+        else:
+            # initialize weights and dates
+            weights = self.get_weights()
+            dates = self._tseries.dates[self.window_size-1:]
+            # create generator for shifted value ranges
+            window_value_ranges = (
+                ts_values[i:i+self.window_size]
+                for i in range(len(self._tseries)+1-self.window_size)
+            )
+            values = list()
+            for window_values in window_value_ranges:
+                # weights applied to inputs before window function
+                weighted_values = [weights[i]*window_values[i]
+                                   for i in range(self.window_size)]
+                # this could often be optimized by using caching / update rules
+                value = _window_func.apply_to_window(weighted_values)
+                values.append(value)
+        tseries = TimeSeries(dates, values)
+        return tseries
+
+    def custom(self, func):
+        """
+        Apply custom function to weighted values in rolling window and return
+        time series.
+
+        :param func: custom function to apply in rolling windows
+        """
+        return self._apply_filter('custom', func)
+
+    def sum(self):
+        """
+        Sum weighted values in rolling window and return time series.
+        """
+        return self._apply_filter('sum')

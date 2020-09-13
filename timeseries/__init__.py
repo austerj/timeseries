@@ -14,7 +14,8 @@ if sys.version_info < (3, 7):
     warnings.warn(
         'package assumes insertion ordered \'dict\' introduced in Python 3.7',
         RuntimeWarning,
-        stacklevel=2)
+        stacklevel=2,
+    )
 
 # components to include on import
 import timeseries.filter

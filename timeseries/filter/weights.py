@@ -52,7 +52,7 @@ class LinearWeights(Weights):
         """
         Initialize linearly increasing weights.
 
-        :param min_weight: minimum weight to apply
+        :param min_weight: minimum weight to apply, must be between 0 and 1
         """
         if min_weight <= 0 or min_weight >= 1:
             raise WeightsError('use minimum weight between 0 and 1')

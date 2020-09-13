@@ -17,6 +17,7 @@ class TimeSeries:
     :example:
     >>> from datetime import datetime
     >>> import timeseries as ts
+
     >>> date1 = datetime.fromisoformat('1970-01-01')
     >>> date2 = datetime.fromisoformat('1970-01-02')
     >>> date3 = datetime.fromisoformat('1970-01-03')
