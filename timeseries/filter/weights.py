@@ -30,12 +30,6 @@ class EvenWeights(Weights):
     >>> EvenWeights().get_weights(5)
     [0.2, 0.2, 0.2, 0.2, 0.2]
     """
-    def __init__(self):
-        """
-        Initialize even weights.
-        """
-        pass
-
     def get_weights(self, window_size):
         weights = [1/window_size for _ in range(window_size)]
         return weights
@@ -70,4 +64,19 @@ class LinearWeights(Weights):
         # slope to ensure weights sum to one
         slope = (1 - window_size*self.min_weight) / partial_sum
         weights = [self.min_weight + slope*_ for _ in range(window_size)]
+        return weights
+
+
+class NoneWeights(Weights):
+    """
+    None-weights (all ones) for rolling window.
+
+    :example:
+    >>> from timeseries.filter.weights import NoneWeights
+
+    >>> NoneWeights().get_weights(5)
+    [1, 1, 1, 1, 1]
+    """
+    def get_weights(self, window_size):
+        weights = [1 for _ in range(window_size)]
         return weights
