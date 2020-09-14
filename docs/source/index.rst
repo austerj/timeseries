@@ -6,10 +6,16 @@
 Welcome to timeseries's documentation!
 ======================================
 
+This is the auto-generated documentation for the timeseries_ package.
+
+.. _timeseries: https://github.com/austerj/timeseries
+
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
+   TimeSeries
+   submodules
 
 
 Indices and tables
