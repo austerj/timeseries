@@ -1,3 +1,4 @@
+import warnings
 from datetime import datetime
 
 from timeseries.errors import (
@@ -171,8 +172,8 @@ class TimeSeries:
     >>> tseries.operator.custom(crosscovariance, tseries2, elementwise=False)
     0.5
 
-    The above example computes the crosscovariance on the intersecting dates.
-    This and the crosscorrelation can alternatively be computed by calling
+    The above example computes the cross-covariance on the intersecting dates.
+    This and the cross-correlation can alternatively be computed by calling
     their respective methods directly.
 
     >>> tseries.crosscovariance(tseries2)
@@ -468,21 +469,28 @@ class TimeSeries:
 
     def crosscovariance(self, other):
         """
-        Return crosscovariance with time series on intersecting dates.
+        Return cross-covariance with time series on intersecting dates.
 
         :param other: time series or broadcastable argument to subtract
         """
         from timeseries.stats import crosscovariance
+        self._intersect_warn(other)
         return self.operator.custom(crosscovariance, other, elementwise=False)
 
     def crosscorrelation(self, other):
         """
-        Return crosscorrelation with time series on intersecting dates.
+        Return cross-correlation with time series on intersecting dates.
 
         :param other: time series or broadcastable argument to subtract
         """
         from timeseries.stats import crosscorrelation
+        self._intersect_warn(other)
         return self.operator.custom(crosscorrelation, other, elementwise=False)
+
+    def _intersect_warn(self, other):
+        if self.dates != other.dates:
+            warnings.warn(
+                'time series have different dates, computing on intersection')
 
     def rolling(self, window_size=1, weights='even', **kwargs):
         """
