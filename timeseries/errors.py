@@ -44,3 +44,9 @@ class FilteringWindowError(ValueError):
     """
     Error raised when applying filter in a window larger than the time series.
     """
+
+
+class OperatorError(RuntimeError):
+    """
+    Error raised when function call fails after time series set operation.
+    """

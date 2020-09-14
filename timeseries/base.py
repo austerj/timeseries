@@ -1,3 +1,4 @@
+import warnings
 from datetime import datetime
 
 from timeseries.errors import (
@@ -7,17 +8,15 @@ from timeseries.errors import (
     IteratorError,
 )
 
-from timeseries.stats import (
-    mean,
-    variance,
-)
-
 
 class TimeSeries:
     """
     Data structure for one-dimensional time series.
 
-    Time series data is automatically sorted in chronological order by date.
+    Allows for easy indexing and various convenient time series calculations
+    including mean, variance, customizable filtering, cross-correlations,
+    element-wise addition etc. Time series data is automatically sorted in
+    chronological order by date.
 
     :example:
     >>> from datetime import datetime
@@ -102,6 +101,87 @@ class TimeSeries:
     >>> tseries.variance()
     1.0
 
+    Time series overload basic arithmetic operations by applying set operations
+    to dates, e.g. elementwise addition applies to union of dates by default,
+    while multiplication applies to the intersection of dates.
+
+    >>> date4 = datetime.fromisoformat('1970-01-04')
+    >>> dates2 = (date1, date2, date4)
+    >>> values2 = (1, 2, 4)
+    >>> tseries2 = ts.TimeSeries(dates2, values2)
+
+    >>> tseries
+    date                            value
+    1970-01-01 00:00:00              1.00
+    1970-01-02 00:00:00              2.00
+    1970-01-03 00:00:00              3.00
+
+    >>> tseries2
+    date                            value
+    1970-01-01 00:00:00              1.00
+    1970-01-02 00:00:00              2.00
+    1970-01-04 00:00:00              4.00
+
+    >>> tseries + tseries2
+    date                            value
+    1970-01-01 00:00:00              2.00
+    1970-01-02 00:00:00              4.00
+    1970-01-03 00:00:00              3.00
+    1970-01-04 00:00:00              4.00
+
+    >>> tseries - tseries2
+    date                            value
+    1970-01-01 00:00:00              0.00
+    1970-01-02 00:00:00              0.00
+    1970-01-03 00:00:00              3.00
+    1970-01-04 00:00:00             -4.00
+
+    >>> tseries * tseries2
+    date                            value
+    1970-01-01 00:00:00              1.00
+    1970-01-02 00:00:00              4.00
+
+    >>> tseries2 ** tseries
+    date                            value
+    1970-01-01 00:00:00              1.00
+    1970-01-02 00:00:00              4.00
+
+    Broadcasting to elementwise operations is supported for float-convertable
+    values across these operations.
+
+    >>> (tseries+1) / 2
+    date                            value
+    1970-01-01 00:00:00              1.00
+    1970-01-02 00:00:00              1.50
+    1970-01-03 00:00:00              2.00
+
+    The set operation and fill values can be chosen by calling methods directly
+    and providing arguments directly.
+
+    >>> tseries.add(tseries2, operation='intersection')
+    date                            value
+    1970-01-01 00:00:00              2.00
+    1970-01-02 00:00:00              4.00
+
+    The operator attribute allows for even more customizable applications of
+    functions, with direct specification of function to apply, set operations
+    and fill values for preprocessing disjoint time series. Aggregation
+    functions can be implemented via the elementwise flag.
+
+    >>> from timeseries.stats import crosscovariance
+    >>> tseries.operator.custom(crosscovariance, tseries2, elementwise=False)
+    0.5
+
+    The above example computes the cross-covariance on the intersecting dates.
+    This and the cross-correlation can alternatively be computed by calling
+    their respective methods directly.
+
+    >>> tseries.crosscovariance(tseries2)
+    0.5
+
+    >>> tseries.crosscorrelation(tseries2)
+    1.0
+
     Basic filtering can be executed by direct calls to various methods. Support
     includes simple moving averages, exponential moving averages and rolling
     variance.
@@ -147,7 +227,6 @@ class TimeSeries:
     1970-01-02 00:00:00              1.80
     1970-01-03 00:00:00              2.80
     """
-
     def __init__(self, dates, values):
         """
         Initialize time series object.
@@ -197,6 +276,32 @@ class TimeSeries:
             raise NotImplementedError(
                 f'cannot assess equality against {type(other)}')
         return equals
+
+    def __add__(self, other):
+        return self.add(other)
+
+    def __sub__(self, other):
+        return self.subtract(other)
+
+    def __mul__(self, other):
+        return self.multiply(other)
+
+    def __rmul__(self, other):
+        return self.__mul__(other)
+
+    def __truediv__(self, other):
+        return self.divide(other)
+
+    def __rtruediv__(self, other):
+        from timeseries.operator import right_divide
+        return self.operator.custom(right_divide, other, 'intersection')
+
+    def __pow__(self, other):
+        return self.power(other)
+
+    def __rpow__(self, other):
+        from timeseries.operator import right_power
+        return self.operator.custom(right_power, other, 'intersection')
 
     def __getitem__(self, key):
         """
@@ -352,13 +457,40 @@ class TimeSeries:
         """
         Return sample mean of time series.
         """
+        from timeseries.stats import mean
         return mean(self.values)
 
     def variance(self):
         """
         Return sample variance of time series.
         """
+        from timeseries.stats import variance
         return variance(self.values)
+
+    def crosscovariance(self, other):
+        """
+        Return cross-covariance with time series on intersecting dates.
+
+        :param other: time series or broadcastable argument to subtract
+        """
+        from timeseries.stats import crosscovariance
+        self._intersect_warn(other)
+        return self.operator.custom(crosscovariance, other, elementwise=False)
+
+    def crosscorrelation(self, other):
+        """
+        Return cross-correlation with time series on intersecting dates.
+
+        :param other: time series or broadcastable argument to subtract
+        """
+        from timeseries.stats import crosscorrelation
+        self._intersect_warn(other)
+        return self.operator.custom(crosscorrelation, other, elementwise=False)
+
+    def _intersect_warn(self, other):
+        if self.dates != other.dates:
+            warnings.warn(
+                'time series have different dates, computing on intersection')
 
     def rolling(self, window_size=1, weights='even', **kwargs):
         """
@@ -388,6 +520,7 @@ class TimeSeries:
 
         :param window_size: integer size of rolling window
         """
+        from timeseries.stats import variance
         return self.rolling(window_size, weights='none').custom(variance)
 
     def exponential_moving_average(self, alpha):
@@ -397,3 +530,71 @@ class TimeSeries:
         :param alpha: smoothing factor, must be between 0 and 1
         """
         return self.rolling(weights='none').exponential_moving_average(alpha)
+
+    @property
+    def operator(self):
+        """
+        Return operator object for customizable function calls.
+        """
+        from timeseries.operator import _TimeSeriesOperator
+        return _TimeSeriesOperator(self)
+
+    def add(self, other, operation='union', fill=0):
+        """
+        Return element-wise summed time series after set operation.
+
+        :param other: time series or broadcastable argument
+        :param operation: set operation to apply to time series dates, defaults
+            to  'union'
+        :param fill: value to fill in missing dates, defaults to 0
+        """
+        from timeseries.operator import add
+        return self.operator.custom(add, other, operation, fill=fill)
+
+    def subtract(self, other, operation='union', fill=0):
+        """
+        Return element-wise subtracted time series after set operation.
+
+        :param other: time series or broadcastable argument to subtract
+        :param operation: set operation to apply to time series dates, defaults
+            to  'union'
+        :param fill: value to fill in missing dates, defaults to 0
+        """
+        from timeseries.operator import subtract
+        return self.operator.custom(subtract, other, operation, fill=fill)
+
+    def multiply(self, other, operation='intersection', fill=1):
+        """
+        Return element-wise multiplied time series after set operation.
+
+        :param other: time series or broadcastable argument to subtract
+        :param operation: set operation to apply to time series dates, defaults
+            to  'intersection'
+        :param fill: value to fill in missing dates, defaults to 1
+        """
+        from timeseries.operator import multiply
+        return self.operator.custom(multiply, other, operation, fill=fill)
+
+    def divide(self, other, operation='intersection', fill=1):
+        """
+        Return element-wise divided time series after set operation.
+
+        :param other: time series or broadcastable argument to subtract
+        :param operation: set operation to apply to time series dates, defaults
+            to  'intersection'
+        :param fill: value to fill in missing dates, defaults to 1
+        """
+        from timeseries.operator import divide
+        return self.operator.custom(divide, other, operation, fill=fill)
+
+    def power(self, other, operation='intersection', fill=1):
+        """
+        Return element-wise exponentiation of time series after set operation.
+
+        :param other: time series or broadcastable argument for exponent
+        :param operation: set operation to apply to time series dates, defaults
+            to  'intersection'
+        :param fill: value to fill in missing dates, defaults to 1
+        """
+        from timeseries.operator import power
+        return self.operator.custom(power, other, operation, fill=fill)

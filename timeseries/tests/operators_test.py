@@ -1,5 +1,6 @@
 from unittest import TestCase
 from datetime import datetime
+
 import timeseries as ts
 
 
@@ -55,4 +56,25 @@ class TestTimeSeriesOperators(TestCase):
         self.assertNotEqual(
             self.tseries,
             ts.TimeSeries(self.dates, self.other_values),
+        )
+
+    def test_custom_sum(self):
+        """
+        Test that time series values can be summed with custom operator.
+        """
+        def sum_func(values1, values2):
+            return sum((x+y for x, y in zip(values1, values2)))
+        self.assertEqual(
+            self.tseries.operator.custom(sum_func, 0, elementwise=False),
+            sum(self.tseries.values),
+        )
+
+    def test_broadcasting(self):
+        """
+        Test that time series values are broadcasted properly.
+        """
+        def broadcast_func(x): return 2**x + x/2 + 5 - x
+        self.assertEqual(
+            broadcast_func(self.tseries).values,
+            tuple(broadcast_func(x) for x in self.values),
         )
