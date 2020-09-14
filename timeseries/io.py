@@ -3,7 +3,6 @@ from collections.abc import Callable
 from datetime import (
     datetime,
     timedelta,
-    timezone,
 )
 
 from timeseries.errors import (
@@ -54,7 +53,7 @@ def read_csv(
     from timeseries.base import TimeSeries
     # default datetime conversion using offset days from epoch
     if not to_datetime:
-        unix_epoch = datetime(1970, 1, 1, tzinfo=timezone.utc)
+        unix_epoch = datetime(1970, 1, 1)
 
         def _to_datetime(days_since_epoch):
             # convert input to float and return datetime object

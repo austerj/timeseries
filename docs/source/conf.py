@@ -25,7 +25,7 @@ release = '0.1'
 
 
 # -- General configuration ---------------------------------------------------
-import sphinx_rtd_theme
+import sphinx_rtd_theme  # noqa: E402, F401
 
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
