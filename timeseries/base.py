@@ -371,8 +371,8 @@ class TimeSeries:
             'none' - no weighting
         :param '**kwargs': keyword arguments passed to weights as parameters
         """
-        from timeseries.filter.window import RollingWindow
-        return RollingWindow(self, window_size, weights, **kwargs)
+        from timeseries.filter.window import _RollingWindow
+        return _RollingWindow(self, window_size, weights, **kwargs)
 
     def moving_average(self, window_size):
         """
