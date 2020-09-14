@@ -7,17 +7,15 @@ from timeseries.errors import (
     IteratorError,
 )
 
-from timeseries.stats import (
-    mean,
-    variance,
-)
-
 
 class TimeSeries:
     """
     Data structure for one-dimensional time series.
 
-    Time series data is automatically sorted in chronological order by date.
+    Allows for easy indexing and various convenient time series calculations
+    including mean, variance, customizable filtering, cross-correlations,
+    element-wise addition etc. Time series data is automatically sorted in
+    chronological order by date.
 
     :example:
     >>> from datetime import datetime
@@ -102,6 +100,66 @@ class TimeSeries:
     >>> tseries.variance()
     1.0
 
+    Time series overload basic arithmetic operations by applying set operations
+    to dates, e.g. elementwise addition applies to union of dates by default,
+    while multiplication applies to the intersection of dates.
+
+    >>> date4 = datetime.fromisoformat('1970-01-04')
+    >>> dates2 = (date1, date2, date4)
+    >>> values2 = (1, 2, 4)
+    >>> tseries2 = ts.TimeSeries(dates2, values2)
+
+    >>> tseries
+    date                            value
+    1970-01-01 00:00:00              1.00
+    1970-01-02 00:00:00              2.00
+    1970-01-03 00:00:00              3.00
+
+    >>> tseries2
+    date                            value
+    1970-01-01 00:00:00              1.00
+    1970-01-02 00:00:00              2.00
+    1970-01-04 00:00:00              4.00
+
+    >>> tseries + tseries2
+    date                            value
+    1970-01-01 00:00:00              2.00
+    1970-01-02 00:00:00              4.00
+    1970-01-03 00:00:00              3.00
+    1970-01-04 00:00:00              4.00
+
+    >>> tseries * tseries2
+    date                            value
+    1970-01-01 00:00:00              1.00
+    1970-01-02 00:00:00              4.00
+
+    The set operation and fill values can be chosen by calling methods directly
+    and providing arguments directly.
+
+    >>> tseries.add(tseries2, operation='intersection')
+    date                            value
+    1970-01-01 00:00:00              2.00
+    1970-01-02 00:00:00              4.00
+
+    The operator attribute allows for even more customizable applications of
+    functions, with direct specification of function to apply, set operations
+    and fill values for preprocessing disjoint time series. Aggregation
+    functions can be implemented via the elementwise flag.
+
+    >>> from timeseries.stats import crosscovariance
+    >>> tseries.operator.custom(crosscovariance, tseries2, elementwise=False)
+    0.5
+
+    The above example computes the crosscovariance on the intersecting dates.
+    This and the crosscorrelation can alternatively be computed by calling
+    their respective methods directly.
+
+    >>> tseries.crosscovariance(tseries2)
+    0.5
+
+    >>> tseries.crosscorrelation(tseries2)
+    1.0
+
     Basic filtering can be executed by direct calls to various methods. Support
     includes simple moving averages, exponential moving averages and rolling
     variance.
@@ -147,7 +205,6 @@ class TimeSeries:
     1970-01-02 00:00:00              1.80
     1970-01-03 00:00:00              2.80
     """
-
     def __init__(self, dates, values):
         """
         Initialize time series object.
@@ -197,6 +254,25 @@ class TimeSeries:
             raise NotImplementedError(
                 f'cannot assess equality against {type(other)}')
         return equals
+
+    def __add__(self, other):
+        return self.add(other)
+
+    def __subtract__(self, other):
+        return self.subtract(other)
+
+    def __mul__(self, other):
+        return self.multiply(other)
+
+    def __rmul__(self, other):
+        return self.__mul__(other)
+
+    def __truediv__(self, other):
+        return self.divide(other)
+
+    def __rtruediv__(self, other):
+        from timeseries.operator import right_divide
+        return self.operator.custom(right_divide, other, 'intersection', 1)
 
     def __getitem__(self, key):
         """
@@ -352,13 +428,33 @@ class TimeSeries:
         """
         Return sample mean of time series.
         """
+        from timeseries.stats import mean
         return mean(self.values)
 
     def variance(self):
         """
         Return sample variance of time series.
         """
+        from timeseries.stats import variance
         return variance(self.values)
+
+    def crosscovariance(self, other):
+        """
+        Return crosscovariance with time series on intersecting dates.
+
+        :param other: time series or broadcastable argument to subtract
+        """
+        from timeseries.stats import crosscovariance
+        return self.operator.custom(crosscovariance, other, elementwise=False)
+
+    def crosscorrelation(self, other):
+        """
+        Return crosscorrelation with time series on intersecting dates.
+
+        :param other: time series or broadcastable argument to subtract
+        """
+        from timeseries.stats import crosscorrelation
+        return self.operator.custom(crosscorrelation, other, elementwise=False)
 
     def rolling(self, window_size=1, weights='even', **kwargs):
         """
@@ -388,6 +484,7 @@ class TimeSeries:
 
         :param window_size: integer size of rolling window
         """
+        from timeseries.stats import variance
         return self.rolling(window_size, weights='none').custom(variance)
 
     def exponential_moving_average(self, alpha):

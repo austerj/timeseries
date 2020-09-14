@@ -203,3 +203,15 @@ def divide(values1, values2):
     """
     divided_values = tuple(x/y for x, y in zip(values1, values2))
     return divided_values
+
+
+def right_divide(values1, values2):
+    """
+    Return element-wise right division of two numeric iterables.
+
+    :param values1: finite-length iterable of float-convertable numbers to
+        divide with
+    :param values2: finite-length iterable of float-convertable numbers
+    """
+    right_divided_values = tuple(y/x for x, y in zip(values1, values2))
+    return right_divided_values

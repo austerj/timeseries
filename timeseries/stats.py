@@ -29,7 +29,7 @@ def variance(values):
     1.0
     """
     sample_mean = mean(values)
-    squared_deviations = [(value-sample_mean)**2 for value in values]
+    squared_deviations = tuple((value-sample_mean)**2 for value in values)
     biased_sample_variance = mean(squared_deviations)
     # using Bessel correction - bias is negligible for large samples
     bias_correction = len(values) / (len(values)-1)
@@ -54,8 +54,8 @@ def crosscovariance(values1, values2):
     """
     sample_mean1 = mean(values1)
     sample_mean2 = mean(values2)
-    product_deviations = [(value1-sample_mean1) * (value2-sample_mean2)
-                          for value1, value2 in zip(values1, values2)]
+    product_deviations = tuple((value1-sample_mean1) * (value2-sample_mean2)
+                               for value1, value2 in zip(values1, values2))
     biased_sample_crosscovariance = mean(product_deviations)
     # using Bessel correction - bias is negligible for large samples
     bias_correction = len(values1) / (len(values1)-1)
