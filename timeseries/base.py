@@ -103,12 +103,19 @@ class TimeSeries:
     1.0
 
     Basic filtering can be executed by direct calls to various methods. Support
-    includes simple moving averages and rolling variance.
+    includes simple moving averages, exponential moving averages and rolling
+    variance.
 
     >>> tseries.moving_average(window_size=2)
     date                            value
     1970-01-02 00:00:00              1.50
     1970-01-03 00:00:00              2.50
+
+    >>> tseries.exponential_moving_average(alpha=0.1)
+    date                            value
+    1970-01-01 00:00:00              1.00
+    1970-01-02 00:00:00              1.10
+    1970-01-03 00:00:00              1.29
 
     >>> tseries.rolling_variance(2)
     date                            value
@@ -353,7 +360,7 @@ class TimeSeries:
         """
         return variance(self.values)
 
-    def rolling(self, window_size, weights='even', **kwargs):
+    def rolling(self, window_size=1, weights='even', **kwargs):
         """
         Return rolling window object for customizable filtering.
 
@@ -382,3 +389,11 @@ class TimeSeries:
         :param window_size: integer size of rolling window
         """
         return self.rolling(window_size, weights='none').custom(variance)
+
+    def exponential_moving_average(self, alpha):
+        """
+        Return exponential moving average.
+
+        :param alpha: smoothing factor, must be between 0 and 1
+        """
+        return self.rolling(weights='none').exponential_moving_average(alpha)

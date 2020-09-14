@@ -15,6 +15,8 @@ from timeseries.filter.func import (
     SeriesFunction,
     CustomWindowFunction,
     SumWindow,
+    CustomExponentialSeriesFunction,
+    ExponentialMovingAverageSeries,
 )
 
 
@@ -32,9 +34,11 @@ class RollingWindow:
     _WINDOWFUNCS = {
         'custom': CustomWindowFunction,
         'sum': SumWindow,
+        'exponential_custom': CustomExponentialSeriesFunction,
+        'exponential_moving_average': ExponentialMovingAverageSeries,
     }
 
-    def __init__(self, tseries, window_size, weights='even', **kwargs):
+    def __init__(self, tseries, window_size=1, weights='even', **kwargs):
         """
         Initialize rolling window object.
 
@@ -146,3 +150,20 @@ class RollingWindow:
         Sum weighted values in rolling window and return time series.
         """
         return self._apply_filter('sum')
+
+    def exponential_custom(self, func, alpha):
+        """
+        Apply custom exponentially smoothed function and return time series.
+
+        :param func: function to apply to series
+        :param alpha: smoothing factor, must be between 0 and 1
+        """
+        return self._apply_filter('exponential_custom', func=func, alpha=alpha)
+
+    def exponential_moving_average(self, alpha):
+        """
+        Sum weighted values in rolling window and return time series.
+
+        :param alpha: smoothing factor, must be between 0 and 1
+        """
+        return self._apply_filter('exponential_moving_average', alpha=alpha)
