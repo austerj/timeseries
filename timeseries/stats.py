@@ -5,6 +5,7 @@ def mean(values):
     :param values: finite-length iterable of float-convertable numbers
 
     :example:
+
     >>> import timeseries as ts
 
     >>> values = (1, 2, 3)
@@ -22,6 +23,7 @@ def variance(values):
     :param values: finite-length iterable of float-convertable numbers
 
     :example:
+
     >>> import timeseries as ts
 
     >>> values = (1, 2, 3)
@@ -45,6 +47,7 @@ def crosscovariance(values1, values2):
     :param values2: finite-length iterable of float-convertable numbers
 
     :example:
+
     >>> import timeseries as ts
 
     >>> values1 = (1, 2, 3)
@@ -71,6 +74,7 @@ def crosscorrelation(values1, values2):
     :param values2: finite-length iterable of float-convertable numbers
 
     :example:
+
     >>> import timeseries as ts
 
     >>> values1 = (1, 2, 3)

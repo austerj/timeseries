@@ -14,12 +14,12 @@ class _TimeSeriesOperator:
     """
     Interface class for extending set operations to time series based on dates
     and applying functions to resulting time series.
+
+    :param tseries: time series to operate on
     """
     def __init__(self, tseries):
         """
         Initialize time series operator object.
-
-        :param tseries: time series to operate on
         """
         self.tseries = tseries
 

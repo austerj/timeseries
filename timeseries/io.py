@@ -27,9 +27,10 @@ def read_csv(
     :param value_column: value column string, defaults to 'values'
     :param to_datetime: date format string or explicit function for datetime
         conversion, defaults to days since UNIX epoch
-    :param '**kwargs': optional keyword arguments passed to DictReader
+    :param ``**kwargs``: optional keyword arguments passed to DictReader
 
     :example:
+
     >>> import timeseries as ts
 
     >>> ts.read_csv(ts.samples_path + 'epoch.csv')
@@ -123,6 +124,6 @@ def to_csv(
     :param value_column: value column string, defaults to 'values'
     :param to_string: date format string or explicit function for string
         conversion, defaults to days since UNIX epoch
-    :param '**kwargs': optional keyword arguments passed to DictWriter
+    :param ``**kwargs``: optional keyword arguments passed to DictWriter
     """
     raise NotImplementedError()

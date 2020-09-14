@@ -18,10 +18,13 @@ class TimeSeries:
     element-wise addition etc. Time series data is automatically sorted in
     chronological order by date.
 
+    :param dates: finite-length iterable of datetime objects
+    :param values: finite-length iterable of float-convertable numbers
+
     :example:
+
     >>> from datetime import datetime
     >>> import timeseries as ts
-
     >>> date1 = datetime.fromisoformat('1970-01-01')
     >>> date2 = datetime.fromisoformat('1970-01-02')
     >>> date3 = datetime.fromisoformat('1970-01-03')
@@ -156,7 +159,7 @@ class TimeSeries:
     1970-01-03 00:00:00              2.00
 
     The set operation and fill values can be chosen by calling methods directly
-    and providing arguments directly.
+    and providing arguments.
 
     >>> tseries.add(tseries2, operation='intersection')
     date                            value
@@ -230,9 +233,6 @@ class TimeSeries:
     def __init__(self, dates, values):
         """
         Initialize time series object.
-
-        :param dates: finite-length iterable of datetime objects
-        :param values: finite-length iterable of float-convertable numbers
         """
         # note: _ prefix indicates internal use, but user could theoretically
         # still directly access and modify / break this
@@ -440,7 +440,7 @@ class TimeSeries:
         :param value_column: value column string, defaults to 'values'
         :param to_string: date format string or explicit function for string
             conversion, defaults to days since UNIX epoch
-        :param '**kwargs': optional keyword arguments passed to DictWriter
+        :param ``**kwargs``: optional keyword arguments passed to DictWriter
         """
         from timeseries.io import to_csv
         to_csv(
@@ -501,7 +501,7 @@ class TimeSeries:
             'even' - all points weighted evenly
             'linear' - weights increasing linearly from 'min_weight' parameter
             'none' - no weighting
-        :param '**kwargs': keyword arguments passed to weights as parameters
+        :param ``**kwargs``: keyword arguments passed to weights as parameters
         """
         from timeseries.filter.window import _RollingWindow
         return _RollingWindow(self, window_size, weights, **kwargs)

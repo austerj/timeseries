@@ -22,6 +22,7 @@ class EvenWeights(Weights):
     Even (uniform) weights for rolling window.
 
     :example:
+
     >>> from timeseries.filter.weights import EvenWeights
 
     >>> EvenWeights().get_weights(4)
@@ -40,6 +41,7 @@ class LinearWeights(Weights):
     Linearly increasing weights for rolling window.
 
     :example:
+
     >>> from timeseries.filter.weights import LinearWeights
 
     >>> LinearWeights(min_weight=0.1).get_weights(2)
@@ -72,6 +74,7 @@ class NoneWeights(Weights):
     None-weights (all ones) for rolling window.
 
     :example:
+
     >>> from timeseries.filter.weights import NoneWeights
 
     >>> NoneWeights().get_weights(5)

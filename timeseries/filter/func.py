@@ -22,12 +22,12 @@ class SeriesFunction(ABC):
 class CustomWindowFunction(WindowFunction):
     """
     Apply custom function in window.
+
+    :param func: function to apply in window
     """
     def __init__(self, func):
         """
         Initialize custom window function.
-
-        :param func: function to apply in window
         """
         super().__init__()
         self.func = func
@@ -57,13 +57,13 @@ class SumWindow(CustomWindowFunction):
 class CustomExponentialSeriesFunction(SeriesFunction):
     """
     Apply custom exponentially smoothed function to series.
+
+    :param func: function to apply to series
+    :param alpha: smoothing factor, must be between 0 and 1
     """
     def __init__(self, func, alpha):
         """
         Initialize custom series function.
-
-        :param func: function to apply to series
-        :param alpha: smoothing factor, must be between 0 and 1
         """
         super().__init__()
         self.func = func
@@ -102,6 +102,8 @@ class CustomExponentialSeriesFunction(SeriesFunction):
 class ExponentialMovingAverageSeries(CustomExponentialSeriesFunction):
     """
     Exponentially smoothed moving average of series.
+
+    :param alpha: smoothing factor, must be between 0 and 1
     """
     def __init__(self, alpha):
         """
