@@ -213,5 +213,27 @@ def right_divide(values1, values2):
         divide with
     :param values2: finite-length iterable of float-convertable numbers
     """
-    right_divided_values = tuple(y/x for x, y in zip(values1, values2))
-    return right_divided_values
+    return divide(values2, values1)
+
+
+def power(values1, values2):
+    """
+    Return element-wise exponentiation of two numeric iterables.
+
+    :param values1: finite-length iterable of float-convertable numbers
+    :param values2: finite-length iterable of float-convertable numbers to use
+        as exponent
+    """
+    exponentiated_values = tuple(x**y for x, y in zip(values1, values2))
+    return exponentiated_values
+
+
+def right_power(values1, values2):
+    """
+    Return element-wise right exponentiation of two numeric iterables.
+
+    :param values1: finite-length iterable of float-convertable numbers to use
+        as exponent
+    :param values2: finite-length iterable of float-convertable numbers
+    """
+    return power(values2, values1)

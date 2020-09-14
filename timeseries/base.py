@@ -128,10 +128,31 @@ class TimeSeries:
     1970-01-03 00:00:00              3.00
     1970-01-04 00:00:00              4.00
 
+    >>> tseries - tseries2
+    date                            value
+    1970-01-01 00:00:00              0.00
+    1970-01-02 00:00:00              0.00
+    1970-01-03 00:00:00              3.00
+    1970-01-04 00:00:00             -4.00
+
     >>> tseries * tseries2
     date                            value
     1970-01-01 00:00:00              1.00
     1970-01-02 00:00:00              4.00
+
+    >>> tseries2 ** tseries
+    date                            value
+    1970-01-01 00:00:00              1.00
+    1970-01-02 00:00:00              4.00
+
+    Broadcasting to elementwise operations is supported for float-convertable
+    values across these operations.
+
+    >>> (tseries+1) / 2
+    date                            value
+    1970-01-01 00:00:00              1.00
+    1970-01-02 00:00:00              1.50
+    1970-01-03 00:00:00              2.00
 
     The set operation and fill values can be chosen by calling methods directly
     and providing arguments directly.
@@ -258,7 +279,7 @@ class TimeSeries:
     def __add__(self, other):
         return self.add(other)
 
-    def __subtract__(self, other):
+    def __sub__(self, other):
         return self.subtract(other)
 
     def __mul__(self, other):
@@ -272,7 +293,14 @@ class TimeSeries:
 
     def __rtruediv__(self, other):
         from timeseries.operator import right_divide
-        return self.operator.custom(right_divide, other, 'intersection', 1)
+        return self.operator.custom(right_divide, other, 'intersection')
+
+    def __pow__(self, other):
+        return self.power(other)
+
+    def __rpow__(self, other):
+        from timeseries.operator import right_power
+        return self.operator.custom(right_power, other, 'intersection')
 
     def __getitem__(self, key):
         """
@@ -550,3 +578,15 @@ class TimeSeries:
         """
         from timeseries.operator import divide
         return self.operator.custom(divide, other, operation, fill=fill)
+
+    def power(self, other, operation='intersection', fill=1):
+        """
+        Return element-wise exponentiation of time series after set operation.
+
+        :param other: time series or broadcastable argument for exponent
+        :param operation: set operation to apply to time series dates, defaults
+            to  'intersection'
+        :param fill: value to fill in missing dates, defaults to 1
+        """
+        from timeseries.operator import power
+        return self.operator.custom(power, other, operation, fill=fill)
