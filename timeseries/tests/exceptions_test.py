@@ -11,6 +11,7 @@ from timeseries.errors import (
     CSVLoadError,
     CSVDateError,
     WeightsError,
+    FilteringWindowError,
 )
 
 
@@ -184,6 +185,18 @@ class TestFilteringExceptionHandling(TestCase):
     """
     Test that filtering raises expected exceptions.
     """
+    def setUp(self):
+        """
+        Initialize values for test cases.
+        """
+        date1 = datetime.fromisoformat('1970-01-01')
+        date2 = datetime.fromisoformat('1970-01-02')
+        date3 = datetime.fromisoformat('1970-01-03')
+        self.dates = (date1, date2, date3)
+        self.values = (1, 2, 3)
+        self.tseries = ts.TimeSeries(self.dates, self.values)
+        self.window_size = 2
+
     def test_negative_min_weight(self):
         """
         Test that minimum weight below 0 in LinearWeights raises WeightsError.
@@ -204,4 +217,78 @@ class TestFilteringExceptionHandling(TestCase):
             WeightsError,
             ts.filter.weights.LinearWeights,
             greater_than_one_min_weight,
+        )
+
+    def test_invalid_weight(self):
+        """
+        Test that invalid weight in rolling window raises KeyError.
+        """
+        invalid_weight = 'invalid_weight'
+        self.assertRaises(
+            KeyError,
+            ts.filter.window.RollingWindow,
+            self.tseries,
+            self.window_size,
+            invalid_weight,
+        )
+
+    def test_invalid_window_size(self):
+        """
+        Test that invalid window size raises TypeError.
+        """
+        invalid_window_size = ['invalid']
+        self.assertRaises(
+            TypeError,
+            ts.filter.window.RollingWindow,
+            self.tseries,
+            invalid_window_size,
+        )
+
+    def test_noninteger_window_size(self):
+        """
+        Test that non-integer window size raises ValueError.
+        """
+        noninteger_window_size = 1.1
+        self.assertRaises(
+            ValueError,
+            ts.filter.window.RollingWindow,
+            self.tseries,
+            noninteger_window_size,
+        )
+
+    def test_too_large_window_size(self):
+        """
+        Test that window size above time series length raises
+        FilteringWindowError.
+        """
+        too_large_window_size = len(self.tseries) + 1
+        self.assertRaises(
+            FilteringWindowError,
+            ts.filter.window.RollingWindow,
+            self.tseries,
+            too_large_window_size,
+        )
+
+    def test_invalid_window_func(self):
+        """
+        Test that invalid window function raises KeyError.
+        """
+        invalid_window_func = 'invalid_window_func'
+        self.assertRaises(
+            KeyError,
+            (ts.filter.window
+                      .RollingWindow(self.tseries, self.window_size)
+                      ._apply_filter),
+            invalid_window_func,
+        )
+
+    def test_invalid_alpha(self):
+        """
+        Test that invalid smoothing factor raises ValueError.
+        """
+        invalid_alpha = -1
+        self.assertRaises(
+            ValueError,
+            self.tseries.exponential_moving_average,
+            invalid_alpha,
         )

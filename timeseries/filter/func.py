@@ -67,6 +67,8 @@ class CustomExponentialSeriesFunction(SeriesFunction):
         """
         super().__init__()
         self.func = func
+        if alpha <= 0 or alpha > 1:
+            raise ValueError('use smoothing factor between 0 and 1')
         self.alpha = alpha
 
     def apply_to_series(self, values):
