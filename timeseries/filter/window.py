@@ -20,7 +20,7 @@ from timeseries.filter.func import (
 )
 
 
-class RollingWindow:
+class _RollingWindow:
     """
     Rolling window class for applying filters to time series.
     """

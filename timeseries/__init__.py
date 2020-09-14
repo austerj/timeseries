@@ -20,6 +20,8 @@ if sys.version_info < (3, 7):
 # components to include on import
 import timeseries.filter
 import timeseries.stats
+import timeseries.operator
+
 from timeseries.base import (
     TimeSeries,
 )

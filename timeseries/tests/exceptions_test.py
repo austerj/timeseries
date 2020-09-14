@@ -226,7 +226,7 @@ class TestFilteringExceptionHandling(TestCase):
         invalid_weight = 'invalid_weight'
         self.assertRaises(
             KeyError,
-            ts.filter.window.RollingWindow,
+            ts.filter.window._RollingWindow,
             self.tseries,
             self.window_size,
             invalid_weight,
@@ -239,7 +239,7 @@ class TestFilteringExceptionHandling(TestCase):
         invalid_window_size = ['invalid']
         self.assertRaises(
             TypeError,
-            ts.filter.window.RollingWindow,
+            ts.filter.window._RollingWindow,
             self.tseries,
             invalid_window_size,
         )
@@ -251,7 +251,7 @@ class TestFilteringExceptionHandling(TestCase):
         noninteger_window_size = 1.1
         self.assertRaises(
             ValueError,
-            ts.filter.window.RollingWindow,
+            ts.filter.window._RollingWindow,
             self.tseries,
             noninteger_window_size,
         )
@@ -264,7 +264,7 @@ class TestFilteringExceptionHandling(TestCase):
         too_large_window_size = len(self.tseries) + 1
         self.assertRaises(
             FilteringWindowError,
-            ts.filter.window.RollingWindow,
+            ts.filter.window._RollingWindow,
             self.tseries,
             too_large_window_size,
         )
@@ -277,7 +277,7 @@ class TestFilteringExceptionHandling(TestCase):
         self.assertRaises(
             KeyError,
             (ts.filter.window
-                      .RollingWindow(self.tseries, self.window_size)
+                      ._RollingWindow(self.tseries, self.window_size)
                       ._apply_filter),
             invalid_window_func,
         )

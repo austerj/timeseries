@@ -371,8 +371,8 @@ class TimeSeries:
             'none' - no weighting
         :param '**kwargs': keyword arguments passed to weights as parameters
         """
-        from timeseries.filter.window import RollingWindow
-        return RollingWindow(self, window_size, weights, **kwargs)
+        from timeseries.filter.window import _RollingWindow
+        return _RollingWindow(self, window_size, weights, **kwargs)
 
     def moving_average(self, window_size):
         """
@@ -397,3 +397,11 @@ class TimeSeries:
         :param alpha: smoothing factor, must be between 0 and 1
         """
         return self.rolling(weights='none').exponential_moving_average(alpha)
+
+    @property
+    def operator(self):
+        """
+        Return operator object for customizable function calls.
+        """
+        from timeseries.operator import _TimeSeriesOperator
+        return _TimeSeriesOperator(self)
