@@ -364,7 +364,7 @@ class TimeSeries:
         """
         Return rolling window object for customizable filtering.
 
-        :param window_size: integer size of rolling window
+        :param window_size: integer size of rolling window, defaults to 1
         :param weights: type of weights, defaults to 'even'. Current options:
             'even' - all points weighted evenly
             'linear' - weights increasing linearly from 'min_weight' parameter

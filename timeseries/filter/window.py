@@ -38,7 +38,7 @@ class RollingWindow:
         'exponential_moving_average': ExponentialMovingAverageSeries,
     }
 
-    def __init__(self, tseries, window_size=1, weights='even', **kwargs):
+    def __init__(self, tseries, window_size, weights='even', **kwargs):
         """
         Initialize rolling window object.
 
