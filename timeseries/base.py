@@ -405,3 +405,51 @@ class TimeSeries:
         """
         from timeseries.operator import _TimeSeriesOperator
         return _TimeSeriesOperator(self)
+
+    def add(self, other, operation='union', fill=0):
+        """
+        Return element-wise summed time series after set operation.
+
+        :param other: time series or broadcastable argument
+        :param operation: set operation to apply to time series dates, defaults
+            to  'union'
+        :param fill: value to fill in missing dates, defaults to 0
+        """
+        from timeseries.operator import add
+        return self.operator.custom(add, other, operation, fill=fill)
+
+    def subtract(self, other, operation='union', fill=0):
+        """
+        Return element-wise subtracted time series after set operation.
+
+        :param other: time series or broadcastable argument to subtract
+        :param operation: set operation to apply to time series dates, defaults
+            to  'union'
+        :param fill: value to fill in missing dates, defaults to 0
+        """
+        from timeseries.operator import subtract
+        return self.operator.custom(subtract, other, operation, fill=fill)
+
+    def multiply(self, other, operation='intersection', fill=1):
+        """
+        Return element-wise multiplied time series after set operation.
+
+        :param other: time series or broadcastable argument to subtract
+        :param operation: set operation to apply to time series dates, defaults
+            to  'intersection'
+        :param fill: value to fill in missing dates, defaults to 1
+        """
+        from timeseries.operator import multiply
+        return self.operator.custom(multiply, other, operation, fill=fill)
+
+    def divide(self, other, operation='intersection', fill=1):
+        """
+        Return element-wise divided time series after set operation.
+
+        :param other: time series or broadcastable argument to subtract
+        :param operation: set operation to apply to time series dates, defaults
+            to  'intersection'
+        :param fill: value to fill in missing dates, defaults to 1
+        """
+        from timeseries.operator import divide
+        return self.operator.custom(divide, other, operation, fill=fill)
