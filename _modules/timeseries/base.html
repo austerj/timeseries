@@ -1,0 +1,799 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>timeseries.base &mdash; timeseries 0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home" alt="Documentation Home"> timeseries
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../TimeSeries.html">TimeSeries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../submodules.html">Submodules</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">timeseries</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>timeseries.base</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for timeseries.base</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="k">import</span> <span class="n">datetime</span>
+
+<span class="kn">from</span> <span class="nn">timeseries.errors</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">DateError</span><span class="p">,</span>
+    <span class="n">NumericValueError</span><span class="p">,</span>
+    <span class="n">InputDimensionError</span><span class="p">,</span>
+    <span class="n">IteratorError</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<div class="viewcode-block" id="TimeSeries"><a class="viewcode-back" href="../../TimeSeries.html#timeseries.TimeSeries">[docs]</a><span class="k">class</span> <span class="nc">TimeSeries</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Data structure for one-dimensional time series.</span>
+
+<span class="sd">    Allows for easy indexing and various convenient time series calculations</span>
+<span class="sd">    including mean, variance, customizable filtering, cross-correlations,</span>
+<span class="sd">    element-wise addition etc. Time series data is automatically sorted in</span>
+<span class="sd">    chronological order by date.</span>
+
+<span class="sd">    :param dates: finite-length iterable of datetime objects</span>
+<span class="sd">    :param values: finite-length iterable of float-convertable numbers</span>
+
+<span class="sd">    :example:</span>
+
+<span class="sd">    &gt;&gt;&gt; from datetime import datetime</span>
+<span class="sd">    &gt;&gt;&gt; import timeseries as ts</span>
+<span class="sd">    &gt;&gt;&gt; date1 = datetime.fromisoformat(&#39;1970-01-01&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; date2 = datetime.fromisoformat(&#39;1970-01-02&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; date3 = datetime.fromisoformat(&#39;1970-01-03&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; dates = (date2, date1, date3)</span>
+<span class="sd">    &gt;&gt;&gt; values = (2, 1, 3)</span>
+<span class="sd">    &gt;&gt;&gt; tseries = ts.TimeSeries(dates, values)</span>
+
+<span class="sd">    The time series is automatically ordered by dates with the earliest entry</span>
+<span class="sd">    on top and the latest entry at the bottom. Various attributes allow for</span>
+<span class="sd">    inspection of the data contained in the time series.</span>
+
+<span class="sd">    &gt;&gt;&gt; tseries</span>
+<span class="sd">    date                            value</span>
+<span class="sd">    1970-01-01 00:00:00              1.00</span>
+<span class="sd">    1970-01-02 00:00:00              2.00</span>
+<span class="sd">    1970-01-03 00:00:00              3.00</span>
+
+<span class="sd">    &gt;&gt;&gt; tseries.dates[1]</span>
+<span class="sd">    datetime.datetime(1970, 1, 2, 0, 0)</span>
+
+<span class="sd">    &gt;&gt;&gt; tseries.iso_dates</span>
+<span class="sd">    (&#39;1970-01-01T00:00:00&#39;, &#39;1970-01-02T00:00:00&#39;, &#39;1970-01-03T00:00:00&#39;)</span>
+
+<span class="sd">    &gt;&gt;&gt; tseries.values</span>
+<span class="sd">    (1.0, 2.0, 3.0)</span>
+
+<span class="sd">    The get_value method can be called explicitly to retrieve the value at the</span>
+<span class="sd">    provided date (either ISO format or a datetime object).</span>
+
+<span class="sd">    &gt;&gt;&gt; tseries.get_value(date2)</span>
+<span class="sd">    2.0</span>
+
+<span class="sd">    &gt;&gt;&gt; tseries.get_value(&#39;1970-01-02&#39;)</span>
+<span class="sd">    2.0</span>
+
+<span class="sd">    Multiple options are available for slicing and subsetting an existing time</span>
+<span class="sd">    series object. The time series can be sliced by the positional indices of</span>
+<span class="sd">    entries like a list and single-element time series can be created from</span>
+<span class="sd">    integer, datetime or string keys. Chronological order is maintained</span>
+<span class="sd">    regardless of the order of the key.</span>
+
+<span class="sd">    &gt;&gt;&gt; tseries[0::2]</span>
+<span class="sd">    date                            value</span>
+<span class="sd">    1970-01-01 00:00:00              1.00</span>
+<span class="sd">    1970-01-03 00:00:00              3.00</span>
+
+<span class="sd">    &gt;&gt;&gt; tseries[0]</span>
+<span class="sd">    date                            value</span>
+<span class="sd">    1970-01-01 00:00:00              1.00</span>
+
+<span class="sd">    &gt;&gt;&gt; tseries[date3]</span>
+<span class="sd">    date                            value</span>
+<span class="sd">    1970-01-03 00:00:00              3.00</span>
+
+<span class="sd">    &gt;&gt;&gt; tseries[&#39;1970-01-03&#39;]</span>
+<span class="sd">    date                            value</span>
+<span class="sd">    1970-01-03 00:00:00              3.00</span>
+
+<span class="sd">    Subsetting by iterables of positional indices, datetimes or strings is also</span>
+<span class="sd">    supported.</span>
+
+<span class="sd">    &gt;&gt;&gt; tseries[[1,0]]</span>
+<span class="sd">    date                            value</span>
+<span class="sd">    1970-01-01 00:00:00              1.00</span>
+<span class="sd">    1970-01-02 00:00:00              2.00</span>
+
+<span class="sd">    &gt;&gt;&gt; tseries[[&#39;1970-01-03&#39;, &#39;1970-01-02&#39;]]</span>
+<span class="sd">    date                            value</span>
+<span class="sd">    1970-01-02 00:00:00              2.00</span>
+<span class="sd">    1970-01-03 00:00:00              3.00</span>
+
+<span class="sd">    Simple statistics can be computed from mean and variance methods.</span>
+
+<span class="sd">    &gt;&gt;&gt; tseries.mean()</span>
+<span class="sd">    2.0</span>
+
+<span class="sd">    &gt;&gt;&gt; tseries.variance()</span>
+<span class="sd">    1.0</span>
+
+<span class="sd">    Time series overload basic arithmetic operations by applying set operations</span>
+<span class="sd">    to dates, e.g. elementwise addition applies to union of dates by default,</span>
+<span class="sd">    while multiplication applies to the intersection of dates.</span>
+
+<span class="sd">    &gt;&gt;&gt; date4 = datetime.fromisoformat(&#39;1970-01-04&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; dates2 = (date1, date2, date4)</span>
+<span class="sd">    &gt;&gt;&gt; values2 = (1, 2, 4)</span>
+<span class="sd">    &gt;&gt;&gt; tseries2 = ts.TimeSeries(dates2, values2)</span>
+
+<span class="sd">    &gt;&gt;&gt; tseries</span>
+<span class="sd">    date                            value</span>
+<span class="sd">    1970-01-01 00:00:00              1.00</span>
+<span class="sd">    1970-01-02 00:00:00              2.00</span>
+<span class="sd">    1970-01-03 00:00:00              3.00</span>
+
+<span class="sd">    &gt;&gt;&gt; tseries2</span>
+<span class="sd">    date                            value</span>
+<span class="sd">    1970-01-01 00:00:00              1.00</span>
+<span class="sd">    1970-01-02 00:00:00              2.00</span>
+<span class="sd">    1970-01-04 00:00:00              4.00</span>
+
+<span class="sd">    &gt;&gt;&gt; tseries + tseries2</span>
+<span class="sd">    date                            value</span>
+<span class="sd">    1970-01-01 00:00:00              2.00</span>
+<span class="sd">    1970-01-02 00:00:00              4.00</span>
+<span class="sd">    1970-01-03 00:00:00              3.00</span>
+<span class="sd">    1970-01-04 00:00:00              4.00</span>
+
+<span class="sd">    &gt;&gt;&gt; tseries - tseries2</span>
+<span class="sd">    date                            value</span>
+<span class="sd">    1970-01-01 00:00:00              0.00</span>
+<span class="sd">    1970-01-02 00:00:00              0.00</span>
+<span class="sd">    1970-01-03 00:00:00              3.00</span>
+<span class="sd">    1970-01-04 00:00:00             -4.00</span>
+
+<span class="sd">    &gt;&gt;&gt; tseries * tseries2</span>
+<span class="sd">    date                            value</span>
+<span class="sd">    1970-01-01 00:00:00              1.00</span>
+<span class="sd">    1970-01-02 00:00:00              4.00</span>
+
+<span class="sd">    &gt;&gt;&gt; tseries2 ** tseries</span>
+<span class="sd">    date                            value</span>
+<span class="sd">    1970-01-01 00:00:00              1.00</span>
+<span class="sd">    1970-01-02 00:00:00              4.00</span>
+
+<span class="sd">    Broadcasting to elementwise operations is supported for float-convertable</span>
+<span class="sd">    values across these operations.</span>
+
+<span class="sd">    &gt;&gt;&gt; (tseries+1) / 2</span>
+<span class="sd">    date                            value</span>
+<span class="sd">    1970-01-01 00:00:00              1.00</span>
+<span class="sd">    1970-01-02 00:00:00              1.50</span>
+<span class="sd">    1970-01-03 00:00:00              2.00</span>
+
+<span class="sd">    The set operation and fill values can be chosen by calling methods directly</span>
+<span class="sd">    and providing arguments.</span>
+
+<span class="sd">    &gt;&gt;&gt; tseries.add(tseries2, operation=&#39;intersection&#39;)</span>
+<span class="sd">    date                            value</span>
+<span class="sd">    1970-01-01 00:00:00              2.00</span>
+<span class="sd">    1970-01-02 00:00:00              4.00</span>
+
+<span class="sd">    The operator attribute allows for even more customizable applications of</span>
+<span class="sd">    functions, with direct specification of function to apply, set operations</span>
+<span class="sd">    and fill values for preprocessing disjoint time series. Aggregation</span>
+<span class="sd">    functions can be implemented via the elementwise flag.</span>
+
+<span class="sd">    &gt;&gt;&gt; from timeseries.stats import crosscovariance</span>
+<span class="sd">    &gt;&gt;&gt; tseries.operator.custom(crosscovariance, tseries2, elementwise=False)</span>
+<span class="sd">    0.5</span>
+
+<span class="sd">    The above example computes the cross-covariance on the intersecting dates.</span>
+<span class="sd">    This and the cross-correlation can alternatively be computed by calling</span>
+<span class="sd">    their respective methods directly.</span>
+
+<span class="sd">    &gt;&gt;&gt; tseries.crosscovariance(tseries2)</span>
+<span class="sd">    0.5</span>
+
+<span class="sd">    &gt;&gt;&gt; tseries.crosscorrelation(tseries2)</span>
+<span class="sd">    1.0</span>
+
+<span class="sd">    Basic filtering can be executed by direct calls to various methods. Support</span>
+<span class="sd">    includes simple moving averages, exponential moving averages and rolling</span>
+<span class="sd">    variance.</span>
+
+<span class="sd">    &gt;&gt;&gt; tseries.moving_average(window_size=2)</span>
+<span class="sd">    date                            value</span>
+<span class="sd">    1970-01-02 00:00:00              1.50</span>
+<span class="sd">    1970-01-03 00:00:00              2.50</span>
+
+<span class="sd">    &gt;&gt;&gt; tseries.exponential_moving_average(alpha=0.1)</span>
+<span class="sd">    date                            value</span>
+<span class="sd">    1970-01-01 00:00:00              1.00</span>
+<span class="sd">    1970-01-02 00:00:00              1.10</span>
+<span class="sd">    1970-01-03 00:00:00              1.29</span>
+
+<span class="sd">    &gt;&gt;&gt; tseries.rolling_variance(2)</span>
+<span class="sd">    date                            value</span>
+<span class="sd">    1970-01-02 00:00:00              0.50</span>
+<span class="sd">    1970-01-03 00:00:00              0.50</span>
+
+<span class="sd">    More advanced filtering methods can be accessed via the rolling method,</span>
+<span class="sd">    which provides an interface to customizable rolling window functionality,</span>
+<span class="sd">    including variable weighting of values and custom functions.</span>
+
+<span class="sd">    &gt;&gt;&gt; tseries.rolling(2, weights=&#39;none&#39;).get_weights()</span>
+<span class="sd">    [1, 1]</span>
+
+<span class="sd">    &gt;&gt;&gt; tseries.rolling(2, weights=&#39;none&#39;).custom(ts.stats.variance)</span>
+<span class="sd">    date                            value</span>
+<span class="sd">    1970-01-02 00:00:00              0.50</span>
+<span class="sd">    1970-01-03 00:00:00              0.50</span>
+
+<span class="sd">    &gt;&gt;&gt; tseries.rolling(2, weights=&#39;none&#39;).sum()</span>
+<span class="sd">    date                            value</span>
+<span class="sd">    1970-01-02 00:00:00              3.00</span>
+<span class="sd">    1970-01-03 00:00:00              5.00</span>
+
+<span class="sd">    &gt;&gt;&gt; tseries.rolling(2, weights=&#39;linear&#39;, min_weight=0.2).get_weights()</span>
+<span class="sd">    [0.2, 0.8]</span>
+
+<span class="sd">    &gt;&gt;&gt; tseries.rolling(2, weights=&#39;linear&#39;, min_weight=0.2).sum()</span>
+<span class="sd">    date                            value</span>
+<span class="sd">    1970-01-02 00:00:00              1.80</span>
+<span class="sd">    1970-01-03 00:00:00              2.80</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dates</span><span class="p">,</span> <span class="n">values</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize time series object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># note: _ prefix indicates internal use, but user could theoretically</span>
+        <span class="c1"># still directly access and modify / break this</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_load_data</span><span class="p">(</span><span class="n">dates</span><span class="p">,</span> <span class="n">values</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return string representation of time series object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># use explicit &#39;YYYY-MM-DD HH:MM:SS&#39; format for consistency</span>
+        <span class="n">date_format</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1"> %H:%M:%S&#39;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">date_string</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="k">for</span> <span class="n">date</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">date_string</span> <span class="o">=</span> <span class="n">date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">date_format</span><span class="p">)</span>
+            <span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> </span><span class="si">{:&gt;17.2f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">date_string</span><span class="p">,</span> <span class="n">value</span><span class="p">))</span>
+        <span class="c1"># use length of last date string to determine padding for header</span>
+        <span class="n">header</span> <span class="o">=</span> <span class="s1">&#39;{date_header:&lt;</span><span class="si">{width}</span><span class="s1">} </span><span class="si">{value_header:&gt;17}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="n">date_header</span><span class="o">=</span><span class="s1">&#39;date&#39;</span><span class="p">,</span>
+            <span class="n">value_header</span><span class="o">=</span><span class="s1">&#39;value&#39;</span><span class="p">,</span>
+            <span class="n">width</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">date_string</span><span class="p">),</span>
+        <span class="p">)</span>
+        <span class="n">repr_string</span> <span class="o">=</span> <span class="n">header</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">repr_string</span>
+
+    <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return number of entries in time series.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return True if other time series has the same dates and values.</span>
+
+<span class="sd">        :param other: time series object to assess equality against</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">TimeSeries</span><span class="p">):</span>
+            <span class="n">equals</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dates</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">dates</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">values</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">values</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
+                <span class="n">f</span><span class="s1">&#39;cannot assess equality against {type(other)}&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">equals</span>
+
+    <span class="k">def</span> <span class="nf">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__sub__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__mul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__rmul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__mul__</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__truediv__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__rtruediv__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="kn">from</span> <span class="nn">timeseries.operator</span> <span class="k">import</span> <span class="n">right_divide</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">custom</span><span class="p">(</span><span class="n">right_divide</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="s1">&#39;intersection&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__pow__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__rpow__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="kn">from</span> <span class="nn">timeseries.operator</span> <span class="k">import</span> <span class="n">right_power</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">custom</span><span class="p">(</span><span class="n">right_power</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="s1">&#39;intersection&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return time series object indexed from key.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># use existing slice implementation for dates and values</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">slice</span><span class="p">):</span>
+                <span class="n">dates</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dates</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+                <span class="n">values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+            <span class="c1"># single-element access from integer position</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+                <span class="n">date</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dates</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+                <span class="n">dates</span> <span class="o">=</span> <span class="p">(</span><span class="n">date</span><span class="p">,)</span>
+                <span class="n">values</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_value</span><span class="p">(</span><span class="n">date</span><span class="p">),)</span>
+            <span class="c1"># single-element access with get_value method</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">datetime</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                <span class="n">date</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_infer_date</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+                <span class="n">dates</span> <span class="o">=</span> <span class="p">(</span><span class="n">date</span><span class="p">,)</span>
+                <span class="n">values</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_value</span><span class="p">(</span><span class="n">date</span><span class="p">),)</span>
+            <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="s1">&#39;__iter__&#39;</span><span class="p">):</span>
+                <span class="n">dates</span><span class="p">,</span> <span class="n">values</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(),</span> <span class="nb">list</span><span class="p">()</span>
+                <span class="c1"># multi-element access from iterable of integers</span>
+                <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">key</span><span class="p">):</span>
+                    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">key</span><span class="p">:</span>
+                        <span class="n">date</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dates</span><span class="p">[</span><span class="n">item</span><span class="p">]</span>
+                        <span class="n">dates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">date</span><span class="p">)</span>
+                        <span class="n">values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_value</span><span class="p">(</span><span class="n">date</span><span class="p">))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="c1"># last-resort: attempt iteration with get_value method</span>
+                    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">key</span><span class="p">:</span>
+                        <span class="n">date</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_infer_date</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+                        <span class="n">dates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">date</span><span class="p">)</span>
+                        <span class="n">values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_value</span><span class="p">(</span><span class="n">date</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
+                    <span class="n">f</span><span class="s1">&#39;cannot infer keys from </span><span class="se">\&#39;</span><span class="si">{key}</span><span class="se">\&#39;</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="c1"># can be optimized - input validation in constructor is redundant</span>
+            <span class="k">return</span> <span class="n">TimeSeries</span><span class="p">(</span><span class="n">dates</span><span class="p">,</span> <span class="n">values</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">(</span><span class="s1">&#39;accessing time series elements failed&#39;</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">dates</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return tuple of time series dates.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">iso_dates</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return tuple of time series dates in ISO format.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">iso_dates</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">date</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span> <span class="k">for</span> <span class="n">date</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">iso_dates</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">values</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return tuple of time series values.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_load_data</span><span class="p">(</span><span class="n">dates</span><span class="p">,</span> <span class="n">values</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Validate inputs and return sorted date-value pairs as dict.</span>
+
+<span class="sd">        :param dates: finite-length iterable of datetime objects</span>
+<span class="sd">        :param values: finite-length iterable of float-convertable numbers</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># check that inputs are iterables with well-defined lengths</span>
+        <span class="k">def</span> <span class="nf">check_valid_iterable</span><span class="p">(</span><span class="n">iterable</span><span class="p">,</span> <span class="nb">input</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">iterable</span><span class="p">,</span> <span class="s1">&#39;__iter__&#39;</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="n">IteratorError</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;</span><span class="si">{input}</span><span class="s1"> object is not iterable&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">iterable</span><span class="p">,</span> <span class="s1">&#39;__len__&#39;</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="n">IteratorError</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;</span><span class="si">{input}</span><span class="s1"> object has no length&#39;</span><span class="p">)</span>
+        <span class="n">check_valid_iterable</span><span class="p">(</span><span class="n">dates</span><span class="p">,</span> <span class="s1">&#39;dates&#39;</span><span class="p">)</span>
+        <span class="n">check_valid_iterable</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="s1">&#39;values&#39;</span><span class="p">)</span>
+        <span class="c1"># validate input dimensions and dates</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">dates</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">InputDimensionError</span><span class="p">(</span><span class="s1">&#39;dates and values must be the same size&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">date</span><span class="p">,</span> <span class="n">datetime</span><span class="p">)</span> <span class="k">for</span> <span class="n">date</span> <span class="ow">in</span> <span class="n">dates</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">DateError</span><span class="p">(</span><span class="s1">&#39;all dates must be datetime objects&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">dates</span><span class="p">))</span> <span class="ow">is</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">dates</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">DateError</span><span class="p">(</span><span class="s1">&#39;all dates must be unique&#39;</span><span class="p">)</span>
+        <span class="c1"># convert values to floats</span>
+        <span class="n">flt_values</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">values</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">flt_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
+            <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">NumericValueError</span><span class="p">(</span>
+                    <span class="s1">&#39;all values must be convertable to floats&#39;</span><span class="p">)</span>
+        <span class="c1"># store date-value pairs as dict sorted chronologically by date</span>
+        <span class="c1"># note: SortedDict is more elegant but depends on third-party module</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="n">date</span><span class="p">:</span> <span class="n">value</span> <span class="k">for</span> <span class="n">date</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">dates</span><span class="p">,</span> <span class="n">flt_values</span><span class="p">))}</span>
+        <span class="k">return</span> <span class="n">data</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_infer_date</span><span class="p">(</span><span class="n">date</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return inferred datetime object.</span>
+
+<span class="sd">        :param date: datetime object or string in ISO format</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># infer date from ISO format if not datetime object</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">date</span><span class="p">,</span> <span class="n">datetime</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">date</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">fromisoformat</span><span class="p">(</span><span class="n">date</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">DateError</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;date inferral from </span><span class="se">\&#39;</span><span class="si">{date}</span><span class="se">\&#39;</span><span class="s1"> failed&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">date</span>
+
+<div class="viewcode-block" id="TimeSeries.get_value"><a class="viewcode-back" href="../../TimeSeries.html#timeseries.TimeSeries.get_value">[docs]</a>    <span class="k">def</span> <span class="nf">get_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">date</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return value of time series at specified date.</span>
+
+<span class="sd">        :param date: datetime object or string in ISO format</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># infer date from ISO format if not datetime object</span>
+        <span class="n">date</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_infer_date</span><span class="p">(</span><span class="n">date</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">date_value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="n">date</span><span class="p">]</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;{date.isoformat()} not found in time series&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">date_value</span></div>
+
+<div class="viewcode-block" id="TimeSeries.to_csv"><a class="viewcode-back" href="../../TimeSeries.html#timeseries.TimeSeries.to_csv">[docs]</a>    <span class="k">def</span> <span class="nf">to_csv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filepath</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Write time series to CSV file.</span>
+
+<span class="sd">        :param filepath: path of output file</span>
+<span class="sd">        :param date_column: date column string, defaults to &#39;times&#39;</span>
+<span class="sd">        :param value_column: value column string, defaults to &#39;values&#39;</span>
+<span class="sd">        :param to_string: date format string or explicit function for string</span>
+<span class="sd">            conversion, defaults to days since UNIX epoch</span>
+<span class="sd">        :param ``**kwargs``: optional keyword arguments passed to DictWriter</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">timeseries.io</span> <span class="k">import</span> <span class="n">to_csv</span>
+        <span class="n">to_csv</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">filepath</span><span class="p">,</span>
+            <span class="n">date_column</span><span class="o">=</span><span class="s1">&#39;times&#39;</span><span class="p">,</span>
+            <span class="n">value_column</span><span class="o">=</span><span class="s1">&#39;values&#39;</span><span class="p">,</span>
+            <span class="n">to_string</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="TimeSeries.mean"><a class="viewcode-back" href="../../TimeSeries.html#timeseries.TimeSeries.mean">[docs]</a>    <span class="k">def</span> <span class="nf">mean</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return sample mean of time series.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">timeseries.stats</span> <span class="k">import</span> <span class="n">mean</span>
+        <span class="k">return</span> <span class="n">mean</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TimeSeries.variance"><a class="viewcode-back" href="../../TimeSeries.html#timeseries.TimeSeries.variance">[docs]</a>    <span class="k">def</span> <span class="nf">variance</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return sample variance of time series.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">timeseries.stats</span> <span class="k">import</span> <span class="n">variance</span>
+        <span class="k">return</span> <span class="n">variance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TimeSeries.crosscovariance"><a class="viewcode-back" href="../../TimeSeries.html#timeseries.TimeSeries.crosscovariance">[docs]</a>    <span class="k">def</span> <span class="nf">crosscovariance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return cross-covariance with time series on intersecting dates.</span>
+
+<span class="sd">        :param other: time series or broadcastable argument to subtract</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">timeseries.stats</span> <span class="k">import</span> <span class="n">crosscovariance</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_intersect_warn</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">custom</span><span class="p">(</span><span class="n">crosscovariance</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="n">elementwise</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TimeSeries.crosscorrelation"><a class="viewcode-back" href="../../TimeSeries.html#timeseries.TimeSeries.crosscorrelation">[docs]</a>    <span class="k">def</span> <span class="nf">crosscorrelation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return cross-correlation with time series on intersecting dates.</span>
+
+<span class="sd">        :param other: time series or broadcastable argument to subtract</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">timeseries.stats</span> <span class="k">import</span> <span class="n">crosscorrelation</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_intersect_warn</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">custom</span><span class="p">(</span><span class="n">crosscorrelation</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="n">elementwise</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_intersect_warn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dates</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">dates</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="s1">&#39;time series have different dates, computing on intersection&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="TimeSeries.rolling"><a class="viewcode-back" href="../../TimeSeries.html#timeseries.TimeSeries.rolling">[docs]</a>    <span class="k">def</span> <span class="nf">rolling</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">window_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="s1">&#39;even&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return rolling window object for customizable filtering.</span>
+
+<span class="sd">        :param window_size: integer size of rolling window, defaults to 1</span>
+<span class="sd">        :param weights: type of weights, defaults to &#39;even&#39;. Current options:</span>
+<span class="sd">            &#39;even&#39; - all points weighted evenly</span>
+<span class="sd">            &#39;linear&#39; - weights increasing linearly from &#39;min_weight&#39; parameter</span>
+<span class="sd">            &#39;none&#39; - no weighting</span>
+<span class="sd">        :param ``**kwargs``: keyword arguments passed to weights as parameters</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">timeseries.filter.window</span> <span class="k">import</span> <span class="n">_RollingWindow</span>
+        <span class="k">return</span> <span class="n">_RollingWindow</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">window_size</span><span class="p">,</span> <span class="n">weights</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TimeSeries.moving_average"><a class="viewcode-back" href="../../TimeSeries.html#timeseries.TimeSeries.moving_average">[docs]</a>    <span class="k">def</span> <span class="nf">moving_average</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">window_size</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return moving average.</span>
+
+<span class="sd">        :param window_size: integer size of rolling window</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="n">window_size</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="s1">&#39;even&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="TimeSeries.rolling_variance"><a class="viewcode-back" href="../../TimeSeries.html#timeseries.TimeSeries.rolling_variance">[docs]</a>    <span class="k">def</span> <span class="nf">rolling_variance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">window_size</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return rolling sample variance.</span>
+
+<span class="sd">        :param window_size: integer size of rolling window</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">timeseries.stats</span> <span class="k">import</span> <span class="n">variance</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="n">window_size</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">custom</span><span class="p">(</span><span class="n">variance</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TimeSeries.exponential_moving_average"><a class="viewcode-back" href="../../TimeSeries.html#timeseries.TimeSeries.exponential_moving_average">[docs]</a>    <span class="k">def</span> <span class="nf">exponential_moving_average</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alpha</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return exponential moving average.</span>
+
+<span class="sd">        :param alpha: smoothing factor, must be between 0 and 1</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="n">weights</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">exponential_moving_average</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">operator</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return operator object for customizable function calls.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">timeseries.operator</span> <span class="k">import</span> <span class="n">_TimeSeriesOperator</span>
+        <span class="k">return</span> <span class="n">_TimeSeriesOperator</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+<div class="viewcode-block" id="TimeSeries.add"><a class="viewcode-back" href="../../TimeSeries.html#timeseries.TimeSeries.add">[docs]</a>    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="n">operation</span><span class="o">=</span><span class="s1">&#39;union&#39;</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return element-wise summed time series after set operation.</span>
+
+<span class="sd">        :param other: time series or broadcastable argument</span>
+<span class="sd">        :param operation: set operation to apply to time series dates, defaults</span>
+<span class="sd">            to  &#39;union&#39;</span>
+<span class="sd">        :param fill: value to fill in missing dates, defaults to 0</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">timeseries.operator</span> <span class="k">import</span> <span class="n">add</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">custom</span><span class="p">(</span><span class="n">add</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="n">operation</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="n">fill</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TimeSeries.subtract"><a class="viewcode-back" href="../../TimeSeries.html#timeseries.TimeSeries.subtract">[docs]</a>    <span class="k">def</span> <span class="nf">subtract</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="n">operation</span><span class="o">=</span><span class="s1">&#39;union&#39;</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return element-wise subtracted time series after set operation.</span>
+
+<span class="sd">        :param other: time series or broadcastable argument to subtract</span>
+<span class="sd">        :param operation: set operation to apply to time series dates, defaults</span>
+<span class="sd">            to  &#39;union&#39;</span>
+<span class="sd">        :param fill: value to fill in missing dates, defaults to 0</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">timeseries.operator</span> <span class="k">import</span> <span class="n">subtract</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">custom</span><span class="p">(</span><span class="n">subtract</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="n">operation</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="n">fill</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TimeSeries.multiply"><a class="viewcode-back" href="../../TimeSeries.html#timeseries.TimeSeries.multiply">[docs]</a>    <span class="k">def</span> <span class="nf">multiply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="n">operation</span><span class="o">=</span><span class="s1">&#39;intersection&#39;</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return element-wise multiplied time series after set operation.</span>
+
+<span class="sd">        :param other: time series or broadcastable argument to subtract</span>
+<span class="sd">        :param operation: set operation to apply to time series dates, defaults</span>
+<span class="sd">            to  &#39;intersection&#39;</span>
+<span class="sd">        :param fill: value to fill in missing dates, defaults to 1</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">timeseries.operator</span> <span class="k">import</span> <span class="n">multiply</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">custom</span><span class="p">(</span><span class="n">multiply</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="n">operation</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="n">fill</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TimeSeries.divide"><a class="viewcode-back" href="../../TimeSeries.html#timeseries.TimeSeries.divide">[docs]</a>    <span class="k">def</span> <span class="nf">divide</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="n">operation</span><span class="o">=</span><span class="s1">&#39;intersection&#39;</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return element-wise divided time series after set operation.</span>
+
+<span class="sd">        :param other: time series or broadcastable argument to subtract</span>
+<span class="sd">        :param operation: set operation to apply to time series dates, defaults</span>
+<span class="sd">            to  &#39;intersection&#39;</span>
+<span class="sd">        :param fill: value to fill in missing dates, defaults to 1</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">timeseries.operator</span> <span class="k">import</span> <span class="n">divide</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">custom</span><span class="p">(</span><span class="n">divide</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="n">operation</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="n">fill</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TimeSeries.power"><a class="viewcode-back" href="../../TimeSeries.html#timeseries.TimeSeries.power">[docs]</a>    <span class="k">def</span> <span class="nf">power</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="n">operation</span><span class="o">=</span><span class="s1">&#39;intersection&#39;</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return element-wise exponentiation of time series after set operation.</span>
+
+<span class="sd">        :param other: time series or broadcastable argument for exponent</span>
+<span class="sd">        :param operation: set operation to apply to time series dates, defaults</span>
+<span class="sd">            to  &#39;intersection&#39;</span>
+<span class="sd">        :param fill: value to fill in missing dates, defaults to 1</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">timeseries.operator</span> <span class="k">import</span> <span class="n">power</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">custom</span><span class="p">(</span><span class="n">power</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="n">operation</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="n">fill</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

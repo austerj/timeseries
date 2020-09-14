@@ -1,0 +1,683 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>TimeSeries &mdash; timeseries 0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Submodules" href="submodules.html" />
+    <link rel="prev" title="Welcome to timeseries’s documentation!" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> timeseries
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">TimeSeries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="submodules.html">Submodules</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">timeseries</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>TimeSeries</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/TimeSeries.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="timeseries">
+<span id="timeseriesclass"></span><h1>TimeSeries<a class="headerlink" href="#timeseries" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="timeseries.TimeSeries">
+<em class="property">class </em><code class="sig-prename descclassname">timeseries.</code><code class="sig-name descname">TimeSeries</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dates</span></em>, <em class="sig-param"><span class="n">values</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/timeseries/base.html#TimeSeries"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.TimeSeries" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Data structure for one-dimensional time series.</p>
+<p>Allows for easy indexing and various convenient time series calculations
+including mean, variance, customizable filtering, cross-correlations,
+element-wise addition etc. Time series data is automatically sorted in
+chronological order by date.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dates</strong> – finite-length iterable of datetime objects</p></li>
+<li><p><strong>values</strong> – finite-length iterable of float-convertable numbers</p></li>
+</ul>
+</dd>
+<dt class="field-even">Example</dt>
+<dd class="field-even"><p></p></dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">datetime</span> <span class="k">import</span> <span class="n">datetime</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">timeseries</span> <span class="k">as</span> <span class="nn">ts</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">date1</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">fromisoformat</span><span class="p">(</span><span class="s1">&#39;1970-01-01&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">date2</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">fromisoformat</span><span class="p">(</span><span class="s1">&#39;1970-01-02&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">date3</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">fromisoformat</span><span class="p">(</span><span class="s1">&#39;1970-01-03&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dates</span> <span class="o">=</span> <span class="p">(</span><span class="n">date2</span><span class="p">,</span> <span class="n">date1</span><span class="p">,</span> <span class="n">date3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">values</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tseries</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">TimeSeries</span><span class="p">(</span><span class="n">dates</span><span class="p">,</span> <span class="n">values</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The time series is automatically ordered by dates with the earliest entry
+on top and the latest entry at the bottom. Various attributes allow for
+inspection of the data contained in the time series.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tseries</span>
+<span class="go">date                            value</span>
+<span class="go">1970-01-01 00:00:00              1.00</span>
+<span class="go">1970-01-02 00:00:00              2.00</span>
+<span class="go">1970-01-03 00:00:00              3.00</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tseries</span><span class="o">.</span><span class="n">dates</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="go">datetime.datetime(1970, 1, 2, 0, 0)</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tseries</span><span class="o">.</span><span class="n">iso_dates</span>
+<span class="go">(&#39;1970-01-01T00:00:00&#39;, &#39;1970-01-02T00:00:00&#39;, &#39;1970-01-03T00:00:00&#39;)</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tseries</span><span class="o">.</span><span class="n">values</span>
+<span class="go">(1.0, 2.0, 3.0)</span>
+</pre></div>
+</div>
+<p>The get_value method can be called explicitly to retrieve the value at the
+provided date (either ISO format or a datetime object).</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tseries</span><span class="o">.</span><span class="n">get_value</span><span class="p">(</span><span class="n">date2</span><span class="p">)</span>
+<span class="go">2.0</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tseries</span><span class="o">.</span><span class="n">get_value</span><span class="p">(</span><span class="s1">&#39;1970-01-02&#39;</span><span class="p">)</span>
+<span class="go">2.0</span>
+</pre></div>
+</div>
+<p>Multiple options are available for slicing and subsetting an existing time
+series object. The time series can be sliced by the positional indices of
+entries like a list and single-element time series can be created from
+integer, datetime or string keys. Chronological order is maintained
+regardless of the order of the key.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tseries</span><span class="p">[</span><span class="mi">0</span><span class="p">::</span><span class="mi">2</span><span class="p">]</span>
+<span class="go">date                            value</span>
+<span class="go">1970-01-01 00:00:00              1.00</span>
+<span class="go">1970-01-03 00:00:00              3.00</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tseries</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="go">date                            value</span>
+<span class="go">1970-01-01 00:00:00              1.00</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tseries</span><span class="p">[</span><span class="n">date3</span><span class="p">]</span>
+<span class="go">date                            value</span>
+<span class="go">1970-01-03 00:00:00              3.00</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tseries</span><span class="p">[</span><span class="s1">&#39;1970-01-03&#39;</span><span class="p">]</span>
+<span class="go">date                            value</span>
+<span class="go">1970-01-03 00:00:00              3.00</span>
+</pre></div>
+</div>
+<p>Subsetting by iterables of positional indices, datetimes or strings is also
+supported.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tseries</span><span class="p">[[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]]</span>
+<span class="go">date                            value</span>
+<span class="go">1970-01-01 00:00:00              1.00</span>
+<span class="go">1970-01-02 00:00:00              2.00</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tseries</span><span class="p">[[</span><span class="s1">&#39;1970-01-03&#39;</span><span class="p">,</span> <span class="s1">&#39;1970-01-02&#39;</span><span class="p">]]</span>
+<span class="go">date                            value</span>
+<span class="go">1970-01-02 00:00:00              2.00</span>
+<span class="go">1970-01-03 00:00:00              3.00</span>
+</pre></div>
+</div>
+<p>Simple statistics can be computed from mean and variance methods.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tseries</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="go">2.0</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tseries</span><span class="o">.</span><span class="n">variance</span><span class="p">()</span>
+<span class="go">1.0</span>
+</pre></div>
+</div>
+<p>Time series overload basic arithmetic operations by applying set operations
+to dates, e.g. elementwise addition applies to union of dates by default,
+while multiplication applies to the intersection of dates.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">date4</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">fromisoformat</span><span class="p">(</span><span class="s1">&#39;1970-01-04&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dates2</span> <span class="o">=</span> <span class="p">(</span><span class="n">date1</span><span class="p">,</span> <span class="n">date2</span><span class="p">,</span> <span class="n">date4</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">values2</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tseries2</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">TimeSeries</span><span class="p">(</span><span class="n">dates2</span><span class="p">,</span> <span class="n">values2</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tseries</span>
+<span class="go">date                            value</span>
+<span class="go">1970-01-01 00:00:00              1.00</span>
+<span class="go">1970-01-02 00:00:00              2.00</span>
+<span class="go">1970-01-03 00:00:00              3.00</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tseries2</span>
+<span class="go">date                            value</span>
+<span class="go">1970-01-01 00:00:00              1.00</span>
+<span class="go">1970-01-02 00:00:00              2.00</span>
+<span class="go">1970-01-04 00:00:00              4.00</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tseries</span> <span class="o">+</span> <span class="n">tseries2</span>
+<span class="go">date                            value</span>
+<span class="go">1970-01-01 00:00:00              2.00</span>
+<span class="go">1970-01-02 00:00:00              4.00</span>
+<span class="go">1970-01-03 00:00:00              3.00</span>
+<span class="go">1970-01-04 00:00:00              4.00</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tseries</span> <span class="o">-</span> <span class="n">tseries2</span>
+<span class="go">date                            value</span>
+<span class="go">1970-01-01 00:00:00              0.00</span>
+<span class="go">1970-01-02 00:00:00              0.00</span>
+<span class="go">1970-01-03 00:00:00              3.00</span>
+<span class="go">1970-01-04 00:00:00             -4.00</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tseries</span> <span class="o">*</span> <span class="n">tseries2</span>
+<span class="go">date                            value</span>
+<span class="go">1970-01-01 00:00:00              1.00</span>
+<span class="go">1970-01-02 00:00:00              4.00</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tseries2</span> <span class="o">**</span> <span class="n">tseries</span>
+<span class="go">date                            value</span>
+<span class="go">1970-01-01 00:00:00              1.00</span>
+<span class="go">1970-01-02 00:00:00              4.00</span>
+</pre></div>
+</div>
+<p>Broadcasting to elementwise operations is supported for float-convertable
+values across these operations.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="p">(</span><span class="n">tseries</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+<span class="go">date                            value</span>
+<span class="go">1970-01-01 00:00:00              1.00</span>
+<span class="go">1970-01-02 00:00:00              1.50</span>
+<span class="go">1970-01-03 00:00:00              2.00</span>
+</pre></div>
+</div>
+<p>The set operation and fill values can be chosen by calling methods directly
+and providing arguments.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tseries</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">tseries2</span><span class="p">,</span> <span class="n">operation</span><span class="o">=</span><span class="s1">&#39;intersection&#39;</span><span class="p">)</span>
+<span class="go">date                            value</span>
+<span class="go">1970-01-01 00:00:00              2.00</span>
+<span class="go">1970-01-02 00:00:00              4.00</span>
+</pre></div>
+</div>
+<p>The operator attribute allows for even more customizable applications of
+functions, with direct specification of function to apply, set operations
+and fill values for preprocessing disjoint time series. Aggregation
+functions can be implemented via the elementwise flag.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">timeseries.stats</span> <span class="k">import</span> <span class="n">crosscovariance</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tseries</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">custom</span><span class="p">(</span><span class="n">crosscovariance</span><span class="p">,</span> <span class="n">tseries2</span><span class="p">,</span> <span class="n">elementwise</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="go">0.5</span>
+</pre></div>
+</div>
+<p>The above example computes the cross-covariance on the intersecting dates.
+This and the cross-correlation can alternatively be computed by calling
+their respective methods directly.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tseries</span><span class="o">.</span><span class="n">crosscovariance</span><span class="p">(</span><span class="n">tseries2</span><span class="p">)</span>
+<span class="go">0.5</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tseries</span><span class="o">.</span><span class="n">crosscorrelation</span><span class="p">(</span><span class="n">tseries2</span><span class="p">)</span>
+<span class="go">1.0</span>
+</pre></div>
+</div>
+<p>Basic filtering can be executed by direct calls to various methods. Support
+includes simple moving averages, exponential moving averages and rolling
+variance.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tseries</span><span class="o">.</span><span class="n">moving_average</span><span class="p">(</span><span class="n">window_size</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="go">date                            value</span>
+<span class="go">1970-01-02 00:00:00              1.50</span>
+<span class="go">1970-01-03 00:00:00              2.50</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tseries</span><span class="o">.</span><span class="n">exponential_moving_average</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="go">date                            value</span>
+<span class="go">1970-01-01 00:00:00              1.00</span>
+<span class="go">1970-01-02 00:00:00              1.10</span>
+<span class="go">1970-01-03 00:00:00              1.29</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tseries</span><span class="o">.</span><span class="n">rolling_variance</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="go">date                            value</span>
+<span class="go">1970-01-02 00:00:00              0.50</span>
+<span class="go">1970-01-03 00:00:00              0.50</span>
+</pre></div>
+</div>
+<p>More advanced filtering methods can be accessed via the rolling method,
+which provides an interface to customizable rolling window functionality,
+including variable weighting of values and custom functions.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tseries</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_weights</span><span class="p">()</span>
+<span class="go">[1, 1]</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tseries</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">custom</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">variance</span><span class="p">)</span>
+<span class="go">date                            value</span>
+<span class="go">1970-01-02 00:00:00              0.50</span>
+<span class="go">1970-01-03 00:00:00              0.50</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tseries</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+<span class="go">date                            value</span>
+<span class="go">1970-01-02 00:00:00              3.00</span>
+<span class="go">1970-01-03 00:00:00              5.00</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tseries</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span> <span class="n">min_weight</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span><span class="o">.</span><span class="n">get_weights</span><span class="p">()</span>
+<span class="go">[0.2, 0.8]</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tseries</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span> <span class="n">min_weight</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+<span class="go">date                            value</span>
+<span class="go">1970-01-02 00:00:00              1.80</span>
+<span class="go">1970-01-03 00:00:00              2.80</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt id="timeseries.TimeSeries.add">
+<code class="sig-name descname">add</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">other</span></em>, <em class="sig-param"><span class="n">operation</span><span class="o">=</span><span class="default_value">'union'</span></em>, <em class="sig-param"><span class="n">fill</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/timeseries/base.html#TimeSeries.add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.TimeSeries.add" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return element-wise summed time series after set operation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>other</strong> – time series or broadcastable argument</p></li>
+<li><p><strong>operation</strong> – set operation to apply to time series dates, defaults
+to  ‘union’</p></li>
+<li><p><strong>fill</strong> – value to fill in missing dates, defaults to 0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="timeseries.TimeSeries.crosscorrelation">
+<code class="sig-name descname">crosscorrelation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">other</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/timeseries/base.html#TimeSeries.crosscorrelation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.TimeSeries.crosscorrelation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return cross-correlation with time series on intersecting dates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>other</strong> – time series or broadcastable argument to subtract</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="timeseries.TimeSeries.crosscovariance">
+<code class="sig-name descname">crosscovariance</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">other</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/timeseries/base.html#TimeSeries.crosscovariance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.TimeSeries.crosscovariance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return cross-covariance with time series on intersecting dates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>other</strong> – time series or broadcastable argument to subtract</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="timeseries.TimeSeries.dates">
+<em class="property">property </em><code class="sig-name descname">dates</code><a class="headerlink" href="#timeseries.TimeSeries.dates" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return tuple of time series dates.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="timeseries.TimeSeries.divide">
+<code class="sig-name descname">divide</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">other</span></em>, <em class="sig-param"><span class="n">operation</span><span class="o">=</span><span class="default_value">'intersection'</span></em>, <em class="sig-param"><span class="n">fill</span><span class="o">=</span><span class="default_value">1</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/timeseries/base.html#TimeSeries.divide"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.TimeSeries.divide" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return element-wise divided time series after set operation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>other</strong> – time series or broadcastable argument to subtract</p></li>
+<li><p><strong>operation</strong> – set operation to apply to time series dates, defaults
+to  ‘intersection’</p></li>
+<li><p><strong>fill</strong> – value to fill in missing dates, defaults to 1</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="timeseries.TimeSeries.exponential_moving_average">
+<code class="sig-name descname">exponential_moving_average</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">alpha</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/timeseries/base.html#TimeSeries.exponential_moving_average"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.TimeSeries.exponential_moving_average" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return exponential moving average.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>alpha</strong> – smoothing factor, must be between 0 and 1</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="timeseries.TimeSeries.get_value">
+<code class="sig-name descname">get_value</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">date</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/timeseries/base.html#TimeSeries.get_value"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.TimeSeries.get_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return value of time series at specified date.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>date</strong> – datetime object or string in ISO format</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="timeseries.TimeSeries.iso_dates">
+<em class="property">property </em><code class="sig-name descname">iso_dates</code><a class="headerlink" href="#timeseries.TimeSeries.iso_dates" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return tuple of time series dates in ISO format.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="timeseries.TimeSeries.mean">
+<code class="sig-name descname">mean</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/timeseries/base.html#TimeSeries.mean"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.TimeSeries.mean" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return sample mean of time series.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="timeseries.TimeSeries.moving_average">
+<code class="sig-name descname">moving_average</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">window_size</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/timeseries/base.html#TimeSeries.moving_average"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.TimeSeries.moving_average" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return moving average.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>window_size</strong> – integer size of rolling window</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="timeseries.TimeSeries.multiply">
+<code class="sig-name descname">multiply</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">other</span></em>, <em class="sig-param"><span class="n">operation</span><span class="o">=</span><span class="default_value">'intersection'</span></em>, <em class="sig-param"><span class="n">fill</span><span class="o">=</span><span class="default_value">1</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/timeseries/base.html#TimeSeries.multiply"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.TimeSeries.multiply" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return element-wise multiplied time series after set operation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>other</strong> – time series or broadcastable argument to subtract</p></li>
+<li><p><strong>operation</strong> – set operation to apply to time series dates, defaults
+to  ‘intersection’</p></li>
+<li><p><strong>fill</strong> – value to fill in missing dates, defaults to 1</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="timeseries.TimeSeries.operator">
+<em class="property">property </em><code class="sig-name descname">operator</code><a class="headerlink" href="#timeseries.TimeSeries.operator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return operator object for customizable function calls.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="timeseries.TimeSeries.power">
+<code class="sig-name descname">power</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">other</span></em>, <em class="sig-param"><span class="n">operation</span><span class="o">=</span><span class="default_value">'intersection'</span></em>, <em class="sig-param"><span class="n">fill</span><span class="o">=</span><span class="default_value">1</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/timeseries/base.html#TimeSeries.power"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.TimeSeries.power" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return element-wise exponentiation of time series after set operation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>other</strong> – time series or broadcastable argument for exponent</p></li>
+<li><p><strong>operation</strong> – set operation to apply to time series dates, defaults
+to  ‘intersection’</p></li>
+<li><p><strong>fill</strong> – value to fill in missing dates, defaults to 1</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="timeseries.TimeSeries.rolling">
+<code class="sig-name descname">rolling</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">window_size</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">weights</span><span class="o">=</span><span class="default_value">'even'</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/timeseries/base.html#TimeSeries.rolling"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.TimeSeries.rolling" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return rolling window object for customizable filtering.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>window_size</strong> – integer size of rolling window, defaults to 1</p></li>
+<li><p><strong>weights</strong> – type of weights, defaults to ‘even’. Current options:
+‘even’ - all points weighted evenly
+‘linear’ - weights increasing linearly from ‘min_weight’ parameter
+‘none’ - no weighting</p></li>
+<li><p><strong>**kwargs</strong> – keyword arguments passed to weights as parameters</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="timeseries.TimeSeries.rolling_variance">
+<code class="sig-name descname">rolling_variance</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">window_size</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/timeseries/base.html#TimeSeries.rolling_variance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.TimeSeries.rolling_variance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return rolling sample variance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>window_size</strong> – integer size of rolling window</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="timeseries.TimeSeries.subtract">
+<code class="sig-name descname">subtract</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">other</span></em>, <em class="sig-param"><span class="n">operation</span><span class="o">=</span><span class="default_value">'union'</span></em>, <em class="sig-param"><span class="n">fill</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/timeseries/base.html#TimeSeries.subtract"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.TimeSeries.subtract" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return element-wise subtracted time series after set operation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>other</strong> – time series or broadcastable argument to subtract</p></li>
+<li><p><strong>operation</strong> – set operation to apply to time series dates, defaults
+to  ‘union’</p></li>
+<li><p><strong>fill</strong> – value to fill in missing dates, defaults to 0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="timeseries.TimeSeries.to_csv">
+<code class="sig-name descname">to_csv</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filepath</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/timeseries/base.html#TimeSeries.to_csv"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.TimeSeries.to_csv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write time series to CSV file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filepath</strong> – path of output file</p></li>
+<li><p><strong>date_column</strong> – date column string, defaults to ‘times’</p></li>
+<li><p><strong>value_column</strong> – value column string, defaults to ‘values’</p></li>
+<li><p><strong>to_string</strong> – date format string or explicit function for string
+conversion, defaults to days since UNIX epoch</p></li>
+<li><p><strong>**kwargs</strong> – optional keyword arguments passed to DictWriter</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="timeseries.TimeSeries.values">
+<em class="property">property </em><code class="sig-name descname">values</code><a class="headerlink" href="#timeseries.TimeSeries.values" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return tuple of time series values.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="timeseries.TimeSeries.variance">
+<code class="sig-name descname">variance</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/timeseries/base.html#TimeSeries.variance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.TimeSeries.variance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return sample variance of time series.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="submodules.html" class="btn btn-neutral float-right" title="Submodules" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral float-left" title="Welcome to timeseries’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

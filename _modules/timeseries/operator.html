@@ -1,0 +1,438 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>timeseries.operator &mdash; timeseries 0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home" alt="Documentation Home"> timeseries
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../TimeSeries.html">TimeSeries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../submodules.html">Submodules</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">timeseries</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>timeseries.operator</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for timeseries.operator</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">warnings</span>
+
+<span class="kn">from</span> <span class="nn">timeseries.base</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">TimeSeries</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">timeseries.errors</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">NumericValueError</span><span class="p">,</span>
+    <span class="n">OperatorError</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">_TimeSeriesOperator</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Interface class for extending set operations to time series based on dates</span>
+<span class="sd">    and applying functions to resulting time series.</span>
+
+<span class="sd">    :param tseries: time series to operate on</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tseries</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize time series operator object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tseries</span> <span class="o">=</span> <span class="n">tseries</span>
+
+    <span class="k">def</span> <span class="nf">_apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="n">arg</span><span class="p">,</span> <span class="n">operation</span><span class="p">,</span> <span class="n">elementwise</span><span class="p">,</span> <span class="n">fill</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Apply function to time series after set operation.</span>
+
+<span class="sd">        :param func: function to apply to time series</span>
+<span class="sd">        :param arg: time series or broadcasted argument passed to function</span>
+<span class="sd">        :param operation: set operation to apply to time series dates</span>
+<span class="sd">        :param elementwise: flag if function is applied elementwise and should</span>
+<span class="sd">            return time series</span>
+<span class="sd">        :param fill: value to fill in missing dates</span>
+<span class="sd">        :param &#39;**kwargs&#39;: keyword arguments passed to function</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># apply specified set operation if arg is time series</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="n">TimeSeries</span><span class="p">):</span>
+            <span class="n">dates_set</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tseries</span><span class="o">.</span><span class="n">dates</span><span class="p">)</span>
+            <span class="n">dates</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_to_dates</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">dates_set</span><span class="p">,</span> <span class="n">operation</span><span class="p">)(</span><span class="n">arg</span><span class="o">.</span><span class="n">dates</span><span class="p">))</span>
+            <span class="c1"># return empty time series if no dates are left after operation</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">dates</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;time series are empty after set operation&#39;</span><span class="p">)</span>
+            <span class="c1"># fill out missing dates / contract time series</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tseries</span><span class="o">.</span><span class="n">dates</span> <span class="o">!=</span> <span class="n">dates</span> <span class="ow">or</span> <span class="n">arg</span><span class="o">.</span><span class="n">dates</span> <span class="o">!=</span> <span class="n">dates</span><span class="p">:</span>
+                <span class="c1"># call to constructor leads to some unnecessary overhead - can</span>
+                <span class="c1"># be further optimized as e.g. input validation can be skipped</span>
+                <span class="n">tseries</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fill_tseries</span><span class="p">(</span><span class="n">dates</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tseries</span><span class="p">,</span> <span class="n">fill</span><span class="p">)</span>
+                <span class="n">arg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fill_tseries</span><span class="p">(</span><span class="n">dates</span><span class="p">,</span> <span class="n">arg</span><span class="p">,</span> <span class="n">fill</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">tseries</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tseries</span>
+                <span class="n">arg</span> <span class="o">=</span> <span class="n">arg</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">dates</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tseries</span><span class="o">.</span><span class="n">dates</span>
+            <span class="n">tseries</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tseries</span>
+            <span class="n">arg</span> <span class="o">=</span> <span class="n">arg</span>
+        <span class="c1"># apply function to time series</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">func_value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_apply_function</span><span class="p">(</span><span class="n">tseries</span><span class="p">,</span> <span class="n">arg</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="n">elementwise</span><span class="p">,</span>
+                                              <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">func_value</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">OperatorError</span><span class="p">(</span><span class="s1">&#39;applying function after set operation failed&#39;</span><span class="p">)</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_apply_function</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">tseries</span><span class="p">,</span> <span class="n">arg</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="n">elementwise</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Apply function to time series and return result, or results as</span>
+<span class="sd">        timeseries if elementwise.</span>
+
+<span class="sd">        :param tseries: time series to operate on</span>
+<span class="sd">        :param arg: time series or broadcasted argument passed to function</span>
+<span class="sd">        :param func: function to apply to time series</span>
+<span class="sd">        :param elementwise: flag if function is applied elementwise and should</span>
+<span class="sd">            return time series</span>
+<span class="sd">        :param &#39;**kwargs&#39;: keyword arguments passed to function</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># skip validation and computation steps if time series is empty</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tseries</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">values2</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># attempt to broadcast second argument if not time series</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="n">TimeSeries</span><span class="p">):</span>
+                <span class="n">values2</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_broadcast</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">tseries</span><span class="p">))</span>
+            <span class="c1"># check that dates are identical if not broadcasting - should not</span>
+            <span class="c1"># be possible to raise this unless called outside _apply</span>
+            <span class="k">elif</span> <span class="n">tseries</span><span class="o">.</span><span class="n">dates</span> <span class="o">!=</span> <span class="n">arg</span><span class="o">.</span><span class="n">dates</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;time series dates do not match&#39;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">values2</span> <span class="o">=</span> <span class="n">arg</span><span class="o">.</span><span class="n">values</span>
+        <span class="c1"># compute function values</span>
+        <span class="n">values1</span> <span class="o">=</span> <span class="n">tseries</span><span class="o">.</span><span class="n">values</span>
+        <span class="n">values</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="n">values1</span><span class="p">,</span> <span class="n">values2</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="c1"># return time series if function applies elementwise</span>
+        <span class="k">if</span> <span class="n">elementwise</span><span class="p">:</span>
+            <span class="n">dates</span> <span class="o">=</span> <span class="n">tseries</span><span class="o">.</span><span class="n">dates</span>
+            <span class="k">return</span> <span class="n">TimeSeries</span><span class="p">(</span><span class="n">dates</span><span class="p">,</span> <span class="n">values</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">values</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_broadcast</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">size</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return value broadcasted to tuple.</span>
+
+<span class="sd">        :param value: float-convertable value</span>
+<span class="sd">        :param size: size of tuple</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">broadcast_float</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">NumericValueError</span><span class="p">(</span>
+                <span class="s1">&#39;cannot broadcast non-float-convertable value&#39;</span><span class="p">)</span>
+        <span class="n">broadcast</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">broadcast_float</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">size</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">broadcast</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_fill_tseries</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">dates</span><span class="p">,</span> <span class="n">tseries</span><span class="p">,</span> <span class="n">fill</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return time series in specified dates with missing values filled.</span>
+
+<span class="sd">        :param tseries: time series object to extend or contract</span>
+<span class="sd">        :param dates: dates to keep and fill if missing</span>
+<span class="sd">        :param fill: value to fill in missing dates</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">dates_set</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">dates</span><span class="p">)</span>
+        <span class="c1"># construct filled values for missing dates</span>
+        <span class="n">missing_dates</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">set_to_dates</span><span class="p">(</span><span class="n">dates_set</span><span class="o">.</span><span class="n">difference</span><span class="p">(</span><span class="n">tseries</span><span class="o">.</span><span class="n">dates</span><span class="p">))</span>
+        <span class="n">missing_values</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">fill</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">missing_dates</span><span class="p">)))</span>
+        <span class="c1"># get existing dates and values to keep</span>
+        <span class="n">keep_dates</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">set_to_dates</span><span class="p">(</span><span class="n">dates_set</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">tseries</span><span class="o">.</span><span class="n">dates</span><span class="p">))</span>
+        <span class="n">keep_values</span> <span class="o">=</span> <span class="n">tseries</span><span class="p">[</span><span class="n">keep_dates</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+        <span class="c1"># concatenate dates and values</span>
+        <span class="n">dates</span> <span class="o">=</span> <span class="n">keep_dates</span> <span class="o">+</span> <span class="n">missing_dates</span>
+        <span class="n">values</span> <span class="o">=</span> <span class="n">keep_values</span> <span class="o">+</span> <span class="n">missing_values</span>
+        <span class="k">return</span> <span class="n">TimeSeries</span><span class="p">(</span><span class="n">dates</span><span class="p">,</span> <span class="n">values</span><span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">set_to_dates</span><span class="p">(</span><span class="nb">set</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convert set of dates to chronologically sorted tuples.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="nb">set</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">custom</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="n">arg</span><span class="p">,</span> <span class="n">operation</span><span class="o">=</span><span class="s1">&#39;intersection&#39;</span><span class="p">,</span> <span class="n">elementwise</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+               <span class="n">fill</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Apply custom function to time series after set operation.</span>
+
+<span class="sd">        :param func: function to apply to time series</span>
+<span class="sd">        :param arg: time series or broadcasted argument passed to function</span>
+<span class="sd">        :param operation: set operation to apply to time series dates, defaults</span>
+<span class="sd">            to  &#39;intersection&#39;</span>
+<span class="sd">        :param elementwise: flag if function is applied elementwise and should</span>
+<span class="sd">            return time series, defaults to True</span>
+<span class="sd">        :param fill: value to fill in missing dates, defaults to 0</span>
+<span class="sd">        :param &#39;**kwargs&#39;: keyword arguments passed to function</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_apply</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">arg</span><span class="p">,</span> <span class="n">operation</span><span class="p">,</span> <span class="n">elementwise</span><span class="p">,</span> <span class="n">fill</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="add"><a class="viewcode-back" href="../../submodules/operator.html#timeseries.operator.add">[docs]</a><span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="n">values1</span><span class="p">,</span> <span class="n">values2</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Return the element-wise sum of two numeric iterables.</span>
+
+<span class="sd">    :param values1: finite-length iterable of float-convertable numbers</span>
+<span class="sd">    :param values2: finite-length iterable of float-convertable numbers</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">added_values</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">x</span><span class="o">+</span><span class="n">y</span> <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">values1</span><span class="p">,</span> <span class="n">values2</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">added_values</span></div>
+
+
+<div class="viewcode-block" id="subtract"><a class="viewcode-back" href="../../submodules/operator.html#timeseries.operator.subtract">[docs]</a><span class="k">def</span> <span class="nf">subtract</span><span class="p">(</span><span class="n">values1</span><span class="p">,</span> <span class="n">values2</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Return element-wise difference of two numeric iterables.</span>
+
+<span class="sd">    :param values1: finite-length iterable of float-convertable numbers</span>
+<span class="sd">    :param values2: finite-length iterable of float-convertable numbers to</span>
+<span class="sd">        subtract</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">differenced_values</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="n">y</span> <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">values1</span><span class="p">,</span> <span class="n">values2</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">differenced_values</span></div>
+
+
+<div class="viewcode-block" id="multiply"><a class="viewcode-back" href="../../submodules/operator.html#timeseries.operator.multiply">[docs]</a><span class="k">def</span> <span class="nf">multiply</span><span class="p">(</span><span class="n">values1</span><span class="p">,</span> <span class="n">values2</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Return element-wise multiplication of two numeric iterables.</span>
+
+<span class="sd">    :param values1: finite-length iterable of float-convertable numbers</span>
+<span class="sd">    :param values2: finite-length iterable of float-convertable numbers</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">multiplied_values</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">y</span> <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">values1</span><span class="p">,</span> <span class="n">values2</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">multiplied_values</span></div>
+
+
+<div class="viewcode-block" id="divide"><a class="viewcode-back" href="../../submodules/operator.html#timeseries.operator.divide">[docs]</a><span class="k">def</span> <span class="nf">divide</span><span class="p">(</span><span class="n">values1</span><span class="p">,</span> <span class="n">values2</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Return element-wise division of two numeric iterables.</span>
+
+<span class="sd">    :param values1: finite-length iterable of float-convertable numbers</span>
+<span class="sd">    :param values2: finite-length iterable of float-convertable numbers to</span>
+<span class="sd">        divide with</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">divided_values</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">x</span><span class="o">/</span><span class="n">y</span> <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">values1</span><span class="p">,</span> <span class="n">values2</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">divided_values</span></div>
+
+
+<div class="viewcode-block" id="right_divide"><a class="viewcode-back" href="../../submodules/operator.html#timeseries.operator.right_divide">[docs]</a><span class="k">def</span> <span class="nf">right_divide</span><span class="p">(</span><span class="n">values1</span><span class="p">,</span> <span class="n">values2</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Return element-wise right division of two numeric iterables.</span>
+
+<span class="sd">    :param values1: finite-length iterable of float-convertable numbers to</span>
+<span class="sd">        divide with</span>
+<span class="sd">    :param values2: finite-length iterable of float-convertable numbers</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">divide</span><span class="p">(</span><span class="n">values2</span><span class="p">,</span> <span class="n">values1</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="power"><a class="viewcode-back" href="../../submodules/operator.html#timeseries.operator.power">[docs]</a><span class="k">def</span> <span class="nf">power</span><span class="p">(</span><span class="n">values1</span><span class="p">,</span> <span class="n">values2</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Return element-wise exponentiation of two numeric iterables.</span>
+
+<span class="sd">    :param values1: finite-length iterable of float-convertable numbers</span>
+<span class="sd">    :param values2: finite-length iterable of float-convertable numbers to use</span>
+<span class="sd">        as exponent</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">exponentiated_values</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">x</span><span class="o">**</span><span class="n">y</span> <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">values1</span><span class="p">,</span> <span class="n">values2</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">exponentiated_values</span></div>
+
+
+<div class="viewcode-block" id="right_power"><a class="viewcode-back" href="../../submodules/operator.html#timeseries.operator.right_power">[docs]</a><span class="k">def</span> <span class="nf">right_power</span><span class="p">(</span><span class="n">values1</span><span class="p">,</span> <span class="n">values2</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Return element-wise right exponentiation of two numeric iterables.</span>
+
+<span class="sd">    :param values1: finite-length iterable of float-convertable numbers to use</span>
+<span class="sd">        as exponent</span>
+<span class="sd">    :param values2: finite-length iterable of float-convertable numbers</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">power</span><span class="p">(</span><span class="n">values2</span><span class="p">,</span> <span class="n">values1</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
