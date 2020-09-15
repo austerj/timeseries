@@ -164,6 +164,34 @@
   <div class="section" id="module-timeseries.errors">
 <span id="errors"></span><h1>errors<a class="headerlink" href="#module-timeseries.errors" title="Permalink to this headline">¶</a></h1>
 <dl class="py exception">
+<dt id="timeseries.errors.IteratorError">
+<em class="property">exception </em><code class="sig-prename descclassname">timeseries.errors.</code><code class="sig-name descname">IteratorError</code><a class="reference internal" href="../_modules/timeseries/errors.html#IteratorError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.errors.IteratorError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ValueError</span></code></p>
+<p>Error raised when creating time series from non-iterable / no-length input.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt id="timeseries.errors.InputDimensionError">
+<em class="property">exception </em><code class="sig-prename descclassname">timeseries.errors.</code><code class="sig-name descname">InputDimensionError</code><a class="reference internal" href="../_modules/timeseries/errors.html#InputDimensionError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.errors.InputDimensionError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">IndexError</span></code></p>
+<p>Error raised when creating time series without matching input dimensions.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt id="timeseries.errors.DateError">
+<em class="property">exception </em><code class="sig-prename descclassname">timeseries.errors.</code><code class="sig-name descname">DateError</code><a class="reference internal" href="../_modules/timeseries/errors.html#DateError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.errors.DateError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">TypeError</span></code></p>
+<p>Error raised when creating time series with non-datetime or duplicate keys.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt id="timeseries.errors.NumericValueError">
+<em class="property">exception </em><code class="sig-prename descclassname">timeseries.errors.</code><code class="sig-name descname">NumericValueError</code><a class="reference internal" href="../_modules/timeseries/errors.html#NumericValueError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.errors.NumericValueError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">TypeError</span></code></p>
+<p>Error raised when creating time series with non-numeric values.</p>
+</dd></dl>
+
+<dl class="py exception">
 <dt id="timeseries.errors.CSVDateError">
 <em class="property">exception </em><code class="sig-prename descclassname">timeseries.errors.</code><code class="sig-name descname">CSVDateError</code><a class="reference internal" href="../_modules/timeseries/errors.html#CSVDateError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.errors.CSVDateError" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">TypeError</span></code></p>
@@ -178,10 +206,10 @@
 </dd></dl>
 
 <dl class="py exception">
-<dt id="timeseries.errors.DateError">
-<em class="property">exception </em><code class="sig-prename descclassname">timeseries.errors.</code><code class="sig-name descname">DateError</code><a class="reference internal" href="../_modules/timeseries/errors.html#DateError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.errors.DateError" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">TypeError</span></code></p>
-<p>Error raised when creating time series with non-datetime or duplicate keys.</p>
+<dt id="timeseries.errors.WeightsError">
+<em class="property">exception </em><code class="sig-prename descclassname">timeseries.errors.</code><code class="sig-name descname">WeightsError</code><a class="reference internal" href="../_modules/timeseries/errors.html#WeightsError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.errors.WeightsError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ValueError</span></code></p>
+<p>Error raised when providing invalid parameters to weights.</p>
 </dd></dl>
 
 <dl class="py exception">
@@ -192,38 +220,10 @@
 </dd></dl>
 
 <dl class="py exception">
-<dt id="timeseries.errors.InputDimensionError">
-<em class="property">exception </em><code class="sig-prename descclassname">timeseries.errors.</code><code class="sig-name descname">InputDimensionError</code><a class="reference internal" href="../_modules/timeseries/errors.html#InputDimensionError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.errors.InputDimensionError" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">IndexError</span></code></p>
-<p>Error raised when creating time series without matching input dimensions.</p>
-</dd></dl>
-
-<dl class="py exception">
-<dt id="timeseries.errors.IteratorError">
-<em class="property">exception </em><code class="sig-prename descclassname">timeseries.errors.</code><code class="sig-name descname">IteratorError</code><a class="reference internal" href="../_modules/timeseries/errors.html#IteratorError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.errors.IteratorError" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ValueError</span></code></p>
-<p>Error raised when creating time series from non-iterable / no-length input.</p>
-</dd></dl>
-
-<dl class="py exception">
-<dt id="timeseries.errors.NumericValueError">
-<em class="property">exception </em><code class="sig-prename descclassname">timeseries.errors.</code><code class="sig-name descname">NumericValueError</code><a class="reference internal" href="../_modules/timeseries/errors.html#NumericValueError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.errors.NumericValueError" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">TypeError</span></code></p>
-<p>Error raised when creating time series with non-numeric values.</p>
-</dd></dl>
-
-<dl class="py exception">
 <dt id="timeseries.errors.OperatorError">
 <em class="property">exception </em><code class="sig-prename descclassname">timeseries.errors.</code><code class="sig-name descname">OperatorError</code><a class="reference internal" href="../_modules/timeseries/errors.html#OperatorError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.errors.OperatorError" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">RuntimeError</span></code></p>
 <p>Error raised when function call fails after time series set operation.</p>
-</dd></dl>
-
-<dl class="py exception">
-<dt id="timeseries.errors.WeightsError">
-<em class="property">exception </em><code class="sig-prename descclassname">timeseries.errors.</code><code class="sig-name descname">WeightsError</code><a class="reference internal" href="../_modules/timeseries/errors.html#WeightsError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.errors.WeightsError" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ValueError</span></code></p>
-<p>Error raised when providing invalid parameters to weights.</p>
 </dd></dl>
 
 </div>

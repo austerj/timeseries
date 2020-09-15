@@ -403,85 +403,9 @@ including variable weighting of values and custom functions.</p>
 </pre></div>
 </div>
 <dl class="py method">
-<dt id="timeseries.TimeSeries.add">
-<code class="sig-name descname">add</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">other</span></em>, <em class="sig-param"><span class="n">operation</span><span class="o">=</span><span class="default_value">'union'</span></em>, <em class="sig-param"><span class="n">fill</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/timeseries/base.html#TimeSeries.add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.TimeSeries.add" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return element-wise summed time series after set operation.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>other</strong> – time series or broadcastable argument</p></li>
-<li><p><strong>operation</strong> – set operation to apply to time series dates, defaults
-to  ‘union’</p></li>
-<li><p><strong>fill</strong> – value to fill in missing dates, defaults to 0</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="timeseries.TimeSeries.crosscorrelation">
-<code class="sig-name descname">crosscorrelation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">other</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/timeseries/base.html#TimeSeries.crosscorrelation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.TimeSeries.crosscorrelation" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return cross-correlation with time series on intersecting dates.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>other</strong> – time series or broadcastable argument to subtract</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="timeseries.TimeSeries.crosscovariance">
-<code class="sig-name descname">crosscovariance</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">other</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/timeseries/base.html#TimeSeries.crosscovariance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.TimeSeries.crosscovariance" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return cross-covariance with time series on intersecting dates.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>other</strong> – time series or broadcastable argument to subtract</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
 <dt id="timeseries.TimeSeries.dates">
 <em class="property">property </em><code class="sig-name descname">dates</code><a class="headerlink" href="#timeseries.TimeSeries.dates" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return tuple of time series dates.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="timeseries.TimeSeries.divide">
-<code class="sig-name descname">divide</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">other</span></em>, <em class="sig-param"><span class="n">operation</span><span class="o">=</span><span class="default_value">'intersection'</span></em>, <em class="sig-param"><span class="n">fill</span><span class="o">=</span><span class="default_value">1</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/timeseries/base.html#TimeSeries.divide"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.TimeSeries.divide" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return element-wise divided time series after set operation.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>other</strong> – time series or broadcastable argument to subtract</p></li>
-<li><p><strong>operation</strong> – set operation to apply to time series dates, defaults
-to  ‘intersection’</p></li>
-<li><p><strong>fill</strong> – value to fill in missing dates, defaults to 1</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="timeseries.TimeSeries.exponential_moving_average">
-<code class="sig-name descname">exponential_moving_average</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">alpha</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/timeseries/base.html#TimeSeries.exponential_moving_average"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.TimeSeries.exponential_moving_average" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return exponential moving average.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>alpha</strong> – smoothing factor, must be between 0 and 1</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="timeseries.TimeSeries.get_value">
-<code class="sig-name descname">get_value</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">date</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/timeseries/base.html#TimeSeries.get_value"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.TimeSeries.get_value" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return value of time series at specified date.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>date</strong> – datetime object or string in ISO format</p>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -491,101 +415,18 @@ to  ‘intersection’</p></li>
 </dd></dl>
 
 <dl class="py method">
-<dt id="timeseries.TimeSeries.mean">
-<code class="sig-name descname">mean</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/timeseries/base.html#TimeSeries.mean"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.TimeSeries.mean" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return sample mean of time series.</p>
+<dt id="timeseries.TimeSeries.values">
+<em class="property">property </em><code class="sig-name descname">values</code><a class="headerlink" href="#timeseries.TimeSeries.values" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return tuple of time series values.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="timeseries.TimeSeries.moving_average">
-<code class="sig-name descname">moving_average</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">window_size</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/timeseries/base.html#TimeSeries.moving_average"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.TimeSeries.moving_average" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return moving average.</p>
+<dt id="timeseries.TimeSeries.get_value">
+<code class="sig-name descname">get_value</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">date</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/timeseries/base.html#TimeSeries.get_value"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.TimeSeries.get_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return value of time series at specified date.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>window_size</strong> – integer size of rolling window</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="timeseries.TimeSeries.multiply">
-<code class="sig-name descname">multiply</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">other</span></em>, <em class="sig-param"><span class="n">operation</span><span class="o">=</span><span class="default_value">'intersection'</span></em>, <em class="sig-param"><span class="n">fill</span><span class="o">=</span><span class="default_value">1</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/timeseries/base.html#TimeSeries.multiply"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.TimeSeries.multiply" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return element-wise multiplied time series after set operation.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>other</strong> – time series or broadcastable argument to subtract</p></li>
-<li><p><strong>operation</strong> – set operation to apply to time series dates, defaults
-to  ‘intersection’</p></li>
-<li><p><strong>fill</strong> – value to fill in missing dates, defaults to 1</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="timeseries.TimeSeries.operator">
-<em class="property">property </em><code class="sig-name descname">operator</code><a class="headerlink" href="#timeseries.TimeSeries.operator" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return operator object for customizable function calls.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="timeseries.TimeSeries.power">
-<code class="sig-name descname">power</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">other</span></em>, <em class="sig-param"><span class="n">operation</span><span class="o">=</span><span class="default_value">'intersection'</span></em>, <em class="sig-param"><span class="n">fill</span><span class="o">=</span><span class="default_value">1</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/timeseries/base.html#TimeSeries.power"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.TimeSeries.power" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return element-wise exponentiation of time series after set operation.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>other</strong> – time series or broadcastable argument for exponent</p></li>
-<li><p><strong>operation</strong> – set operation to apply to time series dates, defaults
-to  ‘intersection’</p></li>
-<li><p><strong>fill</strong> – value to fill in missing dates, defaults to 1</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="timeseries.TimeSeries.rolling">
-<code class="sig-name descname">rolling</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">window_size</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">weights</span><span class="o">=</span><span class="default_value">'even'</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/timeseries/base.html#TimeSeries.rolling"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.TimeSeries.rolling" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return rolling window object for customizable filtering.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>window_size</strong> – integer size of rolling window, defaults to 1</p></li>
-<li><p><strong>weights</strong> – type of weights, defaults to ‘even’. Current options:
-‘even’ - all points weighted evenly
-‘linear’ - weights increasing linearly from ‘min_weight’ parameter
-‘none’ - no weighting</p></li>
-<li><p><strong>**kwargs</strong> – keyword arguments passed to weights as parameters</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="timeseries.TimeSeries.rolling_variance">
-<code class="sig-name descname">rolling_variance</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">window_size</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/timeseries/base.html#TimeSeries.rolling_variance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.TimeSeries.rolling_variance" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return rolling sample variance.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>window_size</strong> – integer size of rolling window</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="timeseries.TimeSeries.subtract">
-<code class="sig-name descname">subtract</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">other</span></em>, <em class="sig-param"><span class="n">operation</span><span class="o">=</span><span class="default_value">'union'</span></em>, <em class="sig-param"><span class="n">fill</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/timeseries/base.html#TimeSeries.subtract"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.TimeSeries.subtract" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return element-wise subtracted time series after set operation.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>other</strong> – time series or broadcastable argument to subtract</p></li>
-<li><p><strong>operation</strong> – set operation to apply to time series dates, defaults
-to  ‘union’</p></li>
-<li><p><strong>fill</strong> – value to fill in missing dates, defaults to 0</p></li>
-</ul>
+<dd class="field-odd"><p><strong>date</strong> – datetime object or string in ISO format</p>
 </dd>
 </dl>
 </dd></dl>
@@ -609,15 +450,174 @@ conversion, defaults to days since UNIX epoch</p></li>
 </dd></dl>
 
 <dl class="py method">
-<dt id="timeseries.TimeSeries.values">
-<em class="property">property </em><code class="sig-name descname">values</code><a class="headerlink" href="#timeseries.TimeSeries.values" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return tuple of time series values.</p>
+<dt id="timeseries.TimeSeries.mean">
+<code class="sig-name descname">mean</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/timeseries/base.html#TimeSeries.mean"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.TimeSeries.mean" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return sample mean of time series.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="timeseries.TimeSeries.variance">
 <code class="sig-name descname">variance</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/timeseries/base.html#TimeSeries.variance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.TimeSeries.variance" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return sample variance of time series.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="timeseries.TimeSeries.crosscovariance">
+<code class="sig-name descname">crosscovariance</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">other</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/timeseries/base.html#TimeSeries.crosscovariance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.TimeSeries.crosscovariance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return cross-covariance with time series on intersecting dates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>other</strong> – time series or broadcastable argument to subtract</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="timeseries.TimeSeries.crosscorrelation">
+<code class="sig-name descname">crosscorrelation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">other</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/timeseries/base.html#TimeSeries.crosscorrelation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.TimeSeries.crosscorrelation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return cross-correlation with time series on intersecting dates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>other</strong> – time series or broadcastable argument to subtract</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="timeseries.TimeSeries.rolling">
+<code class="sig-name descname">rolling</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">window_size</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">weights</span><span class="o">=</span><span class="default_value">'even'</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/timeseries/base.html#TimeSeries.rolling"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.TimeSeries.rolling" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return rolling window object for customizable filtering.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>window_size</strong> – integer size of rolling window, defaults to 1</p></li>
+<li><p><strong>weights</strong> – type of weights, defaults to ‘even’. Current options:
+‘even’ - all points weighted evenly
+‘linear’ - weights increasing linearly from ‘min_weight’ parameter
+‘none’ - no weighting</p></li>
+<li><p><strong>**kwargs</strong> – keyword arguments passed to weights as parameters</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="timeseries.TimeSeries.moving_average">
+<code class="sig-name descname">moving_average</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">window_size</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/timeseries/base.html#TimeSeries.moving_average"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.TimeSeries.moving_average" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return moving average.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>window_size</strong> – integer size of rolling window</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="timeseries.TimeSeries.rolling_variance">
+<code class="sig-name descname">rolling_variance</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">window_size</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/timeseries/base.html#TimeSeries.rolling_variance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.TimeSeries.rolling_variance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return rolling sample variance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>window_size</strong> – integer size of rolling window</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="timeseries.TimeSeries.exponential_moving_average">
+<code class="sig-name descname">exponential_moving_average</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">alpha</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/timeseries/base.html#TimeSeries.exponential_moving_average"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.TimeSeries.exponential_moving_average" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return exponential moving average.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>alpha</strong> – smoothing factor, must be between 0 and 1</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="timeseries.TimeSeries.operator">
+<em class="property">property </em><code class="sig-name descname">operator</code><a class="headerlink" href="#timeseries.TimeSeries.operator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return operator object for customizable function calls.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="timeseries.TimeSeries.add">
+<code class="sig-name descname">add</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">other</span></em>, <em class="sig-param"><span class="n">operation</span><span class="o">=</span><span class="default_value">'union'</span></em>, <em class="sig-param"><span class="n">fill</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/timeseries/base.html#TimeSeries.add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.TimeSeries.add" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return element-wise summed time series after set operation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>other</strong> – time series or broadcastable argument</p></li>
+<li><p><strong>operation</strong> – set operation to apply to time series dates, defaults
+to  ‘union’</p></li>
+<li><p><strong>fill</strong> – value to fill in missing dates, defaults to 0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="timeseries.TimeSeries.subtract">
+<code class="sig-name descname">subtract</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">other</span></em>, <em class="sig-param"><span class="n">operation</span><span class="o">=</span><span class="default_value">'union'</span></em>, <em class="sig-param"><span class="n">fill</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/timeseries/base.html#TimeSeries.subtract"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.TimeSeries.subtract" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return element-wise subtracted time series after set operation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>other</strong> – time series or broadcastable argument to subtract</p></li>
+<li><p><strong>operation</strong> – set operation to apply to time series dates, defaults
+to  ‘union’</p></li>
+<li><p><strong>fill</strong> – value to fill in missing dates, defaults to 0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="timeseries.TimeSeries.multiply">
+<code class="sig-name descname">multiply</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">other</span></em>, <em class="sig-param"><span class="n">operation</span><span class="o">=</span><span class="default_value">'intersection'</span></em>, <em class="sig-param"><span class="n">fill</span><span class="o">=</span><span class="default_value">1</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/timeseries/base.html#TimeSeries.multiply"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.TimeSeries.multiply" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return element-wise multiplied time series after set operation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>other</strong> – time series or broadcastable argument to subtract</p></li>
+<li><p><strong>operation</strong> – set operation to apply to time series dates, defaults
+to  ‘intersection’</p></li>
+<li><p><strong>fill</strong> – value to fill in missing dates, defaults to 1</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="timeseries.TimeSeries.divide">
+<code class="sig-name descname">divide</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">other</span></em>, <em class="sig-param"><span class="n">operation</span><span class="o">=</span><span class="default_value">'intersection'</span></em>, <em class="sig-param"><span class="n">fill</span><span class="o">=</span><span class="default_value">1</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/timeseries/base.html#TimeSeries.divide"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.TimeSeries.divide" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return element-wise divided time series after set operation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>other</strong> – time series or broadcastable argument to subtract</p></li>
+<li><p><strong>operation</strong> – set operation to apply to time series dates, defaults
+to  ‘intersection’</p></li>
+<li><p><strong>fill</strong> – value to fill in missing dates, defaults to 1</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="timeseries.TimeSeries.power">
+<code class="sig-name descname">power</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">other</span></em>, <em class="sig-param"><span class="n">operation</span><span class="o">=</span><span class="default_value">'intersection'</span></em>, <em class="sig-param"><span class="n">fill</span><span class="o">=</span><span class="default_value">1</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/timeseries/base.html#TimeSeries.power"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.TimeSeries.power" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return element-wise exponentiation of time series after set operation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>other</strong> – time series or broadcastable argument for exponent</p></li>
+<li><p><strong>operation</strong> – set operation to apply to time series dates, defaults
+to  ‘intersection’</p></li>
+<li><p><strong>fill</strong> – value to fill in missing dates, defaults to 1</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>

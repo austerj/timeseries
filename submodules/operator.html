@@ -178,6 +178,35 @@
 </dd></dl>
 
 <dl class="py function">
+<dt id="timeseries.operator.subtract">
+<code class="sig-prename descclassname">timeseries.operator.</code><code class="sig-name descname">subtract</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">values1</span></em>, <em class="sig-param"><span class="n">values2</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/timeseries/operator.html#subtract"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.operator.subtract" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return element-wise difference of two numeric iterables.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>values1</strong> – finite-length iterable of float-convertable numbers</p></li>
+<li><p><strong>values2</strong> – finite-length iterable of float-convertable numbers to
+subtract</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="timeseries.operator.multiply">
+<code class="sig-prename descclassname">timeseries.operator.</code><code class="sig-name descname">multiply</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">values1</span></em>, <em class="sig-param"><span class="n">values2</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/timeseries/operator.html#multiply"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.operator.multiply" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return element-wise multiplication of two numeric iterables.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>values1</strong> – finite-length iterable of float-convertable numbers</p></li>
+<li><p><strong>values2</strong> – finite-length iterable of float-convertable numbers</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt id="timeseries.operator.divide">
 <code class="sig-prename descclassname">timeseries.operator.</code><code class="sig-name descname">divide</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">values1</span></em>, <em class="sig-param"><span class="n">values2</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/timeseries/operator.html#divide"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.operator.divide" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return element-wise division of two numeric iterables.</p>
@@ -193,13 +222,14 @@ divide with</p></li>
 </dd></dl>
 
 <dl class="py function">
-<dt id="timeseries.operator.multiply">
-<code class="sig-prename descclassname">timeseries.operator.</code><code class="sig-name descname">multiply</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">values1</span></em>, <em class="sig-param"><span class="n">values2</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/timeseries/operator.html#multiply"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.operator.multiply" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return element-wise multiplication of two numeric iterables.</p>
+<dt id="timeseries.operator.right_divide">
+<code class="sig-prename descclassname">timeseries.operator.</code><code class="sig-name descname">right_divide</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">values1</span></em>, <em class="sig-param"><span class="n">values2</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/timeseries/operator.html#right_divide"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.operator.right_divide" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return element-wise right division of two numeric iterables.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>values1</strong> – finite-length iterable of float-convertable numbers</p></li>
+<li><p><strong>values1</strong> – finite-length iterable of float-convertable numbers to
+divide with</p></li>
 <li><p><strong>values2</strong> – finite-length iterable of float-convertable numbers</p></li>
 </ul>
 </dd>
@@ -222,21 +252,6 @@ as exponent</p></li>
 </dd></dl>
 
 <dl class="py function">
-<dt id="timeseries.operator.right_divide">
-<code class="sig-prename descclassname">timeseries.operator.</code><code class="sig-name descname">right_divide</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">values1</span></em>, <em class="sig-param"><span class="n">values2</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/timeseries/operator.html#right_divide"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.operator.right_divide" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return element-wise right division of two numeric iterables.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>values1</strong> – finite-length iterable of float-convertable numbers to
-divide with</p></li>
-<li><p><strong>values2</strong> – finite-length iterable of float-convertable numbers</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
 <dt id="timeseries.operator.right_power">
 <code class="sig-prename descclassname">timeseries.operator.</code><code class="sig-name descname">right_power</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">values1</span></em>, <em class="sig-param"><span class="n">values2</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/timeseries/operator.html#right_power"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.operator.right_power" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return element-wise right exponentiation of two numeric iterables.</p>
@@ -246,21 +261,6 @@ divide with</p></li>
 <li><p><strong>values1</strong> – finite-length iterable of float-convertable numbers to use
 as exponent</p></li>
 <li><p><strong>values2</strong> – finite-length iterable of float-convertable numbers</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt id="timeseries.operator.subtract">
-<code class="sig-prename descclassname">timeseries.operator.</code><code class="sig-name descname">subtract</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">values1</span></em>, <em class="sig-param"><span class="n">values2</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/timeseries/operator.html#subtract"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.operator.subtract" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return element-wise difference of two numeric iterables.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>values1</strong> – finite-length iterable of float-convertable numbers</p></li>
-<li><p><strong>values2</strong> – finite-length iterable of float-convertable numbers to
-subtract</p></li>
 </ul>
 </dd>
 </dl>

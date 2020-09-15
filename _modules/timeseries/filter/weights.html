@@ -162,9 +162,9 @@
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="k">pass</span>
 
-    <span class="nd">@abstractmethod</span>
+<div class="viewcode-block" id="Weights.get_weights"><a class="viewcode-back" href="../../../submodules/filter.html#timeseries.filter.weights.Weights.get_weights">[docs]</a>    <span class="nd">@abstractmethod</span>
     <span class="k">def</span> <span class="nf">get_weights</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">pass</span></div>
+        <span class="k">pass</span></div></div>
 
 
 <div class="viewcode-block" id="EvenWeights"><a class="viewcode-back" href="../../../submodules/filter.html#timeseries.filter.weights.EvenWeights">[docs]</a><span class="k">class</span> <span class="nc">EvenWeights</span><span class="p">(</span><span class="n">Weights</span><span class="p">):</span>
@@ -181,9 +181,9 @@
 <span class="sd">    &gt;&gt;&gt; EvenWeights().get_weights(5)</span>
 <span class="sd">    [0.2, 0.2, 0.2, 0.2, 0.2]</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">get_weights</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">window_size</span><span class="p">):</span>
+<div class="viewcode-block" id="EvenWeights.get_weights"><a class="viewcode-back" href="../../../submodules/filter.html#timeseries.filter.weights.EvenWeights.get_weights">[docs]</a>    <span class="k">def</span> <span class="nf">get_weights</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">window_size</span><span class="p">):</span>
         <span class="n">weights</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="o">/</span><span class="n">window_size</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">window_size</span><span class="p">)]</span>
-        <span class="k">return</span> <span class="n">weights</span></div>
+        <span class="k">return</span> <span class="n">weights</span></div></div>
 
 
 <div class="viewcode-block" id="LinearWeights"><a class="viewcode-back" href="../../../submodules/filter.html#timeseries.filter.weights.LinearWeights">[docs]</a><span class="k">class</span> <span class="nc">LinearWeights</span><span class="p">(</span><span class="n">Weights</span><span class="p">):</span>
@@ -210,13 +210,13 @@
             <span class="k">raise</span> <span class="n">WeightsError</span><span class="p">(</span><span class="s1">&#39;use minimum weight between 0 and 1&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">min_weight</span> <span class="o">=</span> <span class="n">min_weight</span>
 
-    <span class="k">def</span> <span class="nf">get_weights</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">window_size</span><span class="p">):</span>
+<div class="viewcode-block" id="LinearWeights.get_weights"><a class="viewcode-back" href="../../../submodules/filter.html#timeseries.filter.weights.LinearWeights.get_weights">[docs]</a>    <span class="k">def</span> <span class="nf">get_weights</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">window_size</span><span class="p">):</span>
         <span class="c1"># partial sum of natural numbers from 1 to window_size-1</span>
         <span class="n">partial_sum</span> <span class="o">=</span> <span class="n">window_size</span> <span class="o">*</span> <span class="p">(</span><span class="n">window_size</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span>
         <span class="c1"># slope to ensure weights sum to one</span>
         <span class="n">slope</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">window_size</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">min_weight</span><span class="p">)</span> <span class="o">/</span> <span class="n">partial_sum</span>
         <span class="n">weights</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">min_weight</span> <span class="o">+</span> <span class="n">slope</span><span class="o">*</span><span class="n">_</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">window_size</span><span class="p">)]</span>
-        <span class="k">return</span> <span class="n">weights</span></div>
+        <span class="k">return</span> <span class="n">weights</span></div></div>
 
 
 <div class="viewcode-block" id="NoneWeights"><a class="viewcode-back" href="../../../submodules/filter.html#timeseries.filter.weights.NoneWeights">[docs]</a><span class="k">class</span> <span class="nc">NoneWeights</span><span class="p">(</span><span class="n">Weights</span><span class="p">):</span>
@@ -230,9 +230,9 @@
 <span class="sd">    &gt;&gt;&gt; NoneWeights().get_weights(5)</span>
 <span class="sd">    [1, 1, 1, 1, 1]</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">get_weights</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">window_size</span><span class="p">):</span>
+<div class="viewcode-block" id="NoneWeights.get_weights"><a class="viewcode-back" href="../../../submodules/filter.html#timeseries.filter.weights.NoneWeights.get_weights">[docs]</a>    <span class="k">def</span> <span class="nf">get_weights</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">window_size</span><span class="p">):</span>
         <span class="n">weights</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">window_size</span><span class="p">)]</span>
-        <span class="k">return</span> <span class="n">weights</span></div>
+        <span class="k">return</span> <span class="n">weights</span></div></div>
 </pre></div>
 
            </div>

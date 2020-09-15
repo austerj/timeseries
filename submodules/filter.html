@@ -164,6 +164,18 @@
   <div class="section" id="module-timeseries.filter.window">
 <span id="filter"></span><h1>filter<a class="headerlink" href="#module-timeseries.filter.window" title="Permalink to this headline">¶</a></h1>
 <span class="target" id="module-timeseries.filter.weights"></span><dl class="py class">
+<dt id="timeseries.filter.weights.Weights">
+<em class="property">class </em><code class="sig-prename descclassname">timeseries.filter.weights.</code><code class="sig-name descname">Weights</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/timeseries/filter/weights.html#Weights"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.filter.weights.Weights" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
+<p>Abstract class for applying weights in rolling window.</p>
+<dl class="py method">
+<dt id="timeseries.filter.weights.Weights.get_weights">
+<em class="property">abstract </em><code class="sig-name descname">get_weights</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/timeseries/filter/weights.html#Weights.get_weights"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.filter.weights.Weights.get_weights" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt id="timeseries.filter.weights.EvenWeights">
 <em class="property">class </em><code class="sig-prename descclassname">timeseries.filter.weights.</code><code class="sig-name descname">EvenWeights</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/timeseries/filter/weights.html#EvenWeights"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.filter.weights.EvenWeights" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#timeseries.filter.weights.Weights" title="timeseries.filter.weights.Weights"><code class="xref py py-class docutils literal notranslate"><span class="pre">timeseries.filter.weights.Weights</span></code></a></p>
@@ -183,6 +195,11 @@
 <span class="go">[0.2, 0.2, 0.2, 0.2, 0.2]</span>
 </pre></div>
 </div>
+<dl class="py method">
+<dt id="timeseries.filter.weights.EvenWeights.get_weights">
+<code class="sig-name descname">get_weights</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">window_size</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/timeseries/filter/weights.html#EvenWeights.get_weights"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.filter.weights.EvenWeights.get_weights" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 <dl class="py class">
@@ -205,6 +222,11 @@
 <span class="go">[0.1, 0.2, 0.3, 0.4]</span>
 </pre></div>
 </div>
+<dl class="py method">
+<dt id="timeseries.filter.weights.LinearWeights.get_weights">
+<code class="sig-name descname">get_weights</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">window_size</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/timeseries/filter/weights.html#LinearWeights.get_weights"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.filter.weights.LinearWeights.get_weights" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 <dl class="py class">
@@ -223,16 +245,68 @@
 <span class="go">[1, 1, 1, 1, 1]</span>
 </pre></div>
 </div>
-</dd></dl>
+<dl class="py method">
+<dt id="timeseries.filter.weights.NoneWeights.get_weights">
+<code class="sig-name descname">get_weights</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">window_size</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/timeseries/filter/weights.html#NoneWeights.get_weights"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.filter.weights.NoneWeights.get_weights" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
-<dl class="py class">
-<dt id="timeseries.filter.weights.Weights">
-<em class="property">class </em><code class="sig-prename descclassname">timeseries.filter.weights.</code><code class="sig-name descname">Weights</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/timeseries/filter/weights.html#Weights"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.filter.weights.Weights" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
-<p>Abstract class for applying weights in rolling window.</p>
 </dd></dl>
 
 <span class="target" id="module-timeseries.filter.func"></span><dl class="py class">
+<dt id="timeseries.filter.func.WindowFunction">
+<em class="property">class </em><code class="sig-prename descclassname">timeseries.filter.func.</code><code class="sig-name descname">WindowFunction</code><a class="reference internal" href="../_modules/timeseries/filter/func.html#WindowFunction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.filter.func.WindowFunction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
+<p>Abstract class for applying function in window.</p>
+<dl class="py method">
+<dt id="timeseries.filter.func.WindowFunction.apply_to_window">
+<em class="property">abstract </em><code class="sig-name descname">apply_to_window</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">values</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/timeseries/filter/func.html#WindowFunction.apply_to_window"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.filter.func.WindowFunction.apply_to_window" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="timeseries.filter.func.SeriesFunction">
+<em class="property">class </em><code class="sig-prename descclassname">timeseries.filter.func.</code><code class="sig-name descname">SeriesFunction</code><a class="reference internal" href="../_modules/timeseries/filter/func.html#SeriesFunction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.filter.func.SeriesFunction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
+<p>Abstract class for applying function to series.</p>
+<dl class="py method">
+<dt id="timeseries.filter.func.SeriesFunction.apply_to_series">
+<em class="property">abstract </em><code class="sig-name descname">apply_to_series</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">values</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/timeseries/filter/func.html#SeriesFunction.apply_to_series"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.filter.func.SeriesFunction.apply_to_series" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="timeseries.filter.func.CustomWindowFunction">
+<em class="property">class </em><code class="sig-prename descclassname">timeseries.filter.func.</code><code class="sig-name descname">CustomWindowFunction</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">func</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/timeseries/filter/func.html#CustomWindowFunction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.filter.func.CustomWindowFunction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#timeseries.filter.func.WindowFunction" title="timeseries.filter.func.WindowFunction"><code class="xref py py-class docutils literal notranslate"><span class="pre">timeseries.filter.func.WindowFunction</span></code></a></p>
+<p>Apply custom function in window.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>func</strong> – function to apply in window</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="timeseries.filter.func.CustomWindowFunction.apply_to_window">
+<code class="sig-name descname">apply_to_window</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">values</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/timeseries/filter/func.html#CustomWindowFunction.apply_to_window"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.filter.func.CustomWindowFunction.apply_to_window" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return result of function applied in window.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>values</strong> – values to apply function to</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="timeseries.filter.func.SumWindow">
+<em class="property">class </em><code class="sig-prename descclassname">timeseries.filter.func.</code><code class="sig-name descname">SumWindow</code><a class="reference internal" href="../_modules/timeseries/filter/func.html#SumWindow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.filter.func.SumWindow" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#timeseries.filter.func.CustomWindowFunction" title="timeseries.filter.func.CustomWindowFunction"><code class="xref py py-class docutils literal notranslate"><span class="pre">timeseries.filter.func.CustomWindowFunction</span></code></a></p>
+<p>Sum over values in window.</p>
+</dd></dl>
+
+<dl class="py class">
 <dt id="timeseries.filter.func.CustomExponentialSeriesFunction">
 <em class="property">class </em><code class="sig-prename descclassname">timeseries.filter.func.</code><code class="sig-name descname">CustomExponentialSeriesFunction</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">func</span></em>, <em class="sig-param"><span class="n">alpha</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/timeseries/filter/func.html#CustomExponentialSeriesFunction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.filter.func.CustomExponentialSeriesFunction" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#timeseries.filter.func.SeriesFunction" title="timeseries.filter.func.SeriesFunction"><code class="xref py py-class docutils literal notranslate"><span class="pre">timeseries.filter.func.SeriesFunction</span></code></a></p>
@@ -270,29 +344,6 @@
 </dd></dl>
 
 <dl class="py class">
-<dt id="timeseries.filter.func.CustomWindowFunction">
-<em class="property">class </em><code class="sig-prename descclassname">timeseries.filter.func.</code><code class="sig-name descname">CustomWindowFunction</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">func</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/timeseries/filter/func.html#CustomWindowFunction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.filter.func.CustomWindowFunction" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#timeseries.filter.func.WindowFunction" title="timeseries.filter.func.WindowFunction"><code class="xref py py-class docutils literal notranslate"><span class="pre">timeseries.filter.func.WindowFunction</span></code></a></p>
-<p>Apply custom function in window.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>func</strong> – function to apply in window</p>
-</dd>
-</dl>
-<dl class="py method">
-<dt id="timeseries.filter.func.CustomWindowFunction.apply_to_window">
-<code class="sig-name descname">apply_to_window</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">values</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/timeseries/filter/func.html#CustomWindowFunction.apply_to_window"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.filter.func.CustomWindowFunction.apply_to_window" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return result of function applied in window.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>values</strong> – values to apply function to</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
 <dt id="timeseries.filter.func.ExponentialMovingAverageSeries">
 <em class="property">class </em><code class="sig-prename descclassname">timeseries.filter.func.</code><code class="sig-name descname">ExponentialMovingAverageSeries</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">alpha</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/timeseries/filter/func.html#ExponentialMovingAverageSeries"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.filter.func.ExponentialMovingAverageSeries" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#timeseries.filter.func.CustomExponentialSeriesFunction" title="timeseries.filter.func.CustomExponentialSeriesFunction"><code class="xref py py-class docutils literal notranslate"><span class="pre">timeseries.filter.func.CustomExponentialSeriesFunction</span></code></a></p>
@@ -302,27 +353,6 @@
 <dd class="field-odd"><p><strong>alpha</strong> – smoothing factor, must be between 0 and 1</p>
 </dd>
 </dl>
-</dd></dl>
-
-<dl class="py class">
-<dt id="timeseries.filter.func.SeriesFunction">
-<em class="property">class </em><code class="sig-prename descclassname">timeseries.filter.func.</code><code class="sig-name descname">SeriesFunction</code><a class="reference internal" href="../_modules/timeseries/filter/func.html#SeriesFunction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.filter.func.SeriesFunction" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
-<p>Abstract class for applying function to series.</p>
-</dd></dl>
-
-<dl class="py class">
-<dt id="timeseries.filter.func.SumWindow">
-<em class="property">class </em><code class="sig-prename descclassname">timeseries.filter.func.</code><code class="sig-name descname">SumWindow</code><a class="reference internal" href="../_modules/timeseries/filter/func.html#SumWindow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.filter.func.SumWindow" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#timeseries.filter.func.CustomWindowFunction" title="timeseries.filter.func.CustomWindowFunction"><code class="xref py py-class docutils literal notranslate"><span class="pre">timeseries.filter.func.CustomWindowFunction</span></code></a></p>
-<p>Sum over values in window.</p>
-</dd></dl>
-
-<dl class="py class">
-<dt id="timeseries.filter.func.WindowFunction">
-<em class="property">class </em><code class="sig-prename descclassname">timeseries.filter.func.</code><code class="sig-name descname">WindowFunction</code><a class="reference internal" href="../_modules/timeseries/filter/func.html#WindowFunction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.filter.func.WindowFunction" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
-<p>Abstract class for applying function in window.</p>
 </dd></dl>
 
 </div>

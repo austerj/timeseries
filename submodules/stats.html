@@ -163,70 +163,6 @@
   <div class="section" id="module-timeseries.stats">
 <span id="stats"></span><h1>stats<a class="headerlink" href="#module-timeseries.stats" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
-<dt id="timeseries.stats.adf_test">
-<code class="sig-prename descclassname">timeseries.stats.</code><code class="sig-name descname">adf_test</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">values</span></em>, <em class="sig-param"><span class="n">significance</span><span class="o">=</span><span class="default_value">0.05</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/timeseries/stats.html#adf_test"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.stats.adf_test" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the augmented Dickey-Fuller unit root test statistic and result.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>values</strong> – finite-length iterable of float-convertable numbers</p></li>
-<li><p><strong>significance</strong> – level of significance, defaults to 0.05</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt id="timeseries.stats.crosscorrelation">
-<code class="sig-prename descclassname">timeseries.stats.</code><code class="sig-name descname">crosscorrelation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">values1</span></em>, <em class="sig-param"><span class="n">values2</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/timeseries/stats.html#crosscorrelation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.stats.crosscorrelation" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the (normalized) Pearson cross-correlation of two numeric iterables.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>values1</strong> – finite-length iterable of float-convertable numbers</p></li>
-<li><p><strong>values2</strong> – finite-length iterable of float-convertable numbers</p></li>
-</ul>
-</dd>
-<dt class="field-even">Example</dt>
-<dd class="field-even"><p></p></dd>
-</dl>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">timeseries</span> <span class="k">as</span> <span class="nn">ts</span>
-</pre></div>
-</div>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">values1</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">values2</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">4</span><span class="p">,</span> <span class="o">-</span><span class="mi">6</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ts</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">crosscorrelation</span><span class="p">(</span><span class="n">values1</span><span class="p">,</span> <span class="n">values2</span><span class="p">)</span>
-<span class="go">-1.0</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="py function">
-<dt id="timeseries.stats.crosscovariance">
-<code class="sig-prename descclassname">timeseries.stats.</code><code class="sig-name descname">crosscovariance</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">values1</span></em>, <em class="sig-param"><span class="n">values2</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/timeseries/stats.html#crosscovariance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.stats.crosscovariance" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the (unnormalized) cross-covariance of two numeric iterables.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>values1</strong> – finite-length iterable of float-convertable numbers</p></li>
-<li><p><strong>values2</strong> – finite-length iterable of float-convertable numbers</p></li>
-</ul>
-</dd>
-<dt class="field-even">Example</dt>
-<dd class="field-even"><p></p></dd>
-</dl>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">timeseries</span> <span class="k">as</span> <span class="nn">ts</span>
-</pre></div>
-</div>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">values1</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">values2</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">4</span><span class="p">,</span> <span class="o">-</span><span class="mi">6</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ts</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">crosscovariance</span><span class="p">(</span><span class="n">values1</span><span class="p">,</span> <span class="n">values2</span><span class="p">)</span>
-<span class="go">-2.0</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="py function">
 <dt id="timeseries.stats.mean">
 <code class="sig-prename descclassname">timeseries.stats.</code><code class="sig-name descname">mean</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">values</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/timeseries/stats.html#mean"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.stats.mean" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the sample mean of a numeric iterable.</p>
@@ -266,6 +202,70 @@
 <span class="go">1.0</span>
 </pre></div>
 </div>
+</dd></dl>
+
+<dl class="py function">
+<dt id="timeseries.stats.crosscovariance">
+<code class="sig-prename descclassname">timeseries.stats.</code><code class="sig-name descname">crosscovariance</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">values1</span></em>, <em class="sig-param"><span class="n">values2</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/timeseries/stats.html#crosscovariance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.stats.crosscovariance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the (unnormalized) cross-covariance of two numeric iterables.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>values1</strong> – finite-length iterable of float-convertable numbers</p></li>
+<li><p><strong>values2</strong> – finite-length iterable of float-convertable numbers</p></li>
+</ul>
+</dd>
+<dt class="field-even">Example</dt>
+<dd class="field-even"><p></p></dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">timeseries</span> <span class="k">as</span> <span class="nn">ts</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">values1</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">values2</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">4</span><span class="p">,</span> <span class="o">-</span><span class="mi">6</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ts</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">crosscovariance</span><span class="p">(</span><span class="n">values1</span><span class="p">,</span> <span class="n">values2</span><span class="p">)</span>
+<span class="go">-2.0</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt id="timeseries.stats.crosscorrelation">
+<code class="sig-prename descclassname">timeseries.stats.</code><code class="sig-name descname">crosscorrelation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">values1</span></em>, <em class="sig-param"><span class="n">values2</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/timeseries/stats.html#crosscorrelation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.stats.crosscorrelation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the (normalized) Pearson cross-correlation of two numeric iterables.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>values1</strong> – finite-length iterable of float-convertable numbers</p></li>
+<li><p><strong>values2</strong> – finite-length iterable of float-convertable numbers</p></li>
+</ul>
+</dd>
+<dt class="field-even">Example</dt>
+<dd class="field-even"><p></p></dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">timeseries</span> <span class="k">as</span> <span class="nn">ts</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">values1</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">values2</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">4</span><span class="p">,</span> <span class="o">-</span><span class="mi">6</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ts</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">crosscorrelation</span><span class="p">(</span><span class="n">values1</span><span class="p">,</span> <span class="n">values2</span><span class="p">)</span>
+<span class="go">-1.0</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt id="timeseries.stats.adf_test">
+<code class="sig-prename descclassname">timeseries.stats.</code><code class="sig-name descname">adf_test</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">values</span></em>, <em class="sig-param"><span class="n">significance</span><span class="o">=</span><span class="default_value">0.05</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/timeseries/stats.html#adf_test"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.stats.adf_test" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the augmented Dickey-Fuller unit root test statistic and result.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>values</strong> – finite-length iterable of float-convertable numbers</p></li>
+<li><p><strong>significance</strong> – level of significance, defaults to 0.05</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 </div>

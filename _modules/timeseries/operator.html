@@ -160,7 +160,7 @@
 <span class="p">)</span>
 
 
-<span class="k">class</span> <span class="nc">_TimeSeriesOperator</span><span class="p">:</span>
+<div class="viewcode-block" id="_TimeSeriesOperator"><a class="viewcode-back" href="../../submodules/operator.html#timeseries.operator._TimeSeriesOperator">[docs]</a><span class="k">class</span> <span class="nc">_TimeSeriesOperator</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Interface class for extending set operations to time series based on dates</span>
 <span class="sd">    and applying functions to resulting time series.</span>
@@ -183,7 +183,7 @@
 <span class="sd">        :param elementwise: flag if function is applied elementwise and should</span>
 <span class="sd">            return time series</span>
 <span class="sd">        :param fill: value to fill in missing dates</span>
-<span class="sd">        :param &#39;**kwargs&#39;: keyword arguments passed to function</span>
+<span class="sd">        :param ``**kwargs``: keyword arguments passed to function</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># apply specified set operation if arg is time series</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="n">TimeSeries</span><span class="p">):</span>
@@ -224,7 +224,7 @@
 <span class="sd">        :param func: function to apply to time series</span>
 <span class="sd">        :param elementwise: flag if function is applied elementwise and should</span>
 <span class="sd">            return time series</span>
-<span class="sd">        :param &#39;**kwargs&#39;: keyword arguments passed to function</span>
+<span class="sd">        :param ``**kwargs``: keyword arguments passed to function</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># skip validation and computation steps if time series is empty</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tseries</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
@@ -285,14 +285,14 @@
         <span class="n">values</span> <span class="o">=</span> <span class="n">keep_values</span> <span class="o">+</span> <span class="n">missing_values</span>
         <span class="k">return</span> <span class="n">TimeSeries</span><span class="p">(</span><span class="n">dates</span><span class="p">,</span> <span class="n">values</span><span class="p">)</span>
 
-    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="_TimeSeriesOperator.set_to_dates"><a class="viewcode-back" href="../../submodules/operator.html#timeseries.operator._TimeSeriesOperator.set_to_dates">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">set_to_dates</span><span class="p">(</span><span class="nb">set</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Convert set of dates to chronologically sorted tuples.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="nb">set</span><span class="p">))</span>
+        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="nb">set</span><span class="p">))</span></div>
 
-    <span class="k">def</span> <span class="nf">custom</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="n">arg</span><span class="p">,</span> <span class="n">operation</span><span class="o">=</span><span class="s1">&#39;intersection&#39;</span><span class="p">,</span> <span class="n">elementwise</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<div class="viewcode-block" id="_TimeSeriesOperator.custom"><a class="viewcode-back" href="../../submodules/operator.html#timeseries.operator._TimeSeriesOperator.custom">[docs]</a>    <span class="k">def</span> <span class="nf">custom</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="n">arg</span><span class="p">,</span> <span class="n">operation</span><span class="o">=</span><span class="s1">&#39;intersection&#39;</span><span class="p">,</span> <span class="n">elementwise</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                <span class="n">fill</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Apply custom function to time series after set operation.</span>
@@ -304,9 +304,9 @@
 <span class="sd">        :param elementwise: flag if function is applied elementwise and should</span>
 <span class="sd">            return time series, defaults to True</span>
 <span class="sd">        :param fill: value to fill in missing dates, defaults to 0</span>
-<span class="sd">        :param &#39;**kwargs&#39;: keyword arguments passed to function</span>
+<span class="sd">        :param ``**kwargs``: keyword arguments passed to function</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_apply</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">arg</span><span class="p">,</span> <span class="n">operation</span><span class="p">,</span> <span class="n">elementwise</span><span class="p">,</span> <span class="n">fill</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_apply</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">arg</span><span class="p">,</span> <span class="n">operation</span><span class="p">,</span> <span class="n">elementwise</span><span class="p">,</span> <span class="n">fill</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div></div>
 
 
 <div class="viewcode-block" id="add"><a class="viewcode-back" href="../../submodules/operator.html#timeseries.operator.add">[docs]</a><span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="n">values1</span><span class="p">,</span> <span class="n">values2</span><span class="p">):</span>
