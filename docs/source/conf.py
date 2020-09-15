@@ -47,7 +47,7 @@ exclude_patterns = []
 # default autodoc options
 autodoc_default_options = {
     'member-order': 'bysource',
-    'undoc-members': True,
+    'private-members': True,
 }
 
 # -- Options for HTML output -------------------------------------------------
