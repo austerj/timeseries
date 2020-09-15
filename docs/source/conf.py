@@ -44,6 +44,11 @@ templates_path = ['_templates']
 # This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = []
 
+# default autodoc options
+autodoc_default_options = {
+    'member-order': 'bysource',
+    'undoc-members': True,
+}
 
 # -- Options for HTML output -------------------------------------------------
 

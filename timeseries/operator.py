@@ -33,7 +33,7 @@ class _TimeSeriesOperator:
         :param elementwise: flag if function is applied elementwise and should
             return time series
         :param fill: value to fill in missing dates
-        :param '**kwargs': keyword arguments passed to function
+        :param ``**kwargs``: keyword arguments passed to function
         """
         # apply specified set operation if arg is time series
         if isinstance(arg, TimeSeries):
@@ -74,7 +74,7 @@ class _TimeSeriesOperator:
         :param func: function to apply to time series
         :param elementwise: flag if function is applied elementwise and should
             return time series
-        :param '**kwargs': keyword arguments passed to function
+        :param ``**kwargs``: keyword arguments passed to function
         """
         # skip validation and computation steps if time series is empty
         if len(tseries) == 0:
@@ -154,7 +154,7 @@ class _TimeSeriesOperator:
         :param elementwise: flag if function is applied elementwise and should
             return time series, defaults to True
         :param fill: value to fill in missing dates, defaults to 0
-        :param '**kwargs': keyword arguments passed to function
+        :param ``**kwargs``: keyword arguments passed to function
         """
         return self._apply(func, arg, operation, elementwise, fill, **kwargs)
 

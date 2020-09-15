@@ -97,7 +97,7 @@ class _RollingWindow:
 
         :param window_func: windowed function to apply. Current options:
             'average' - weighted moving average over window size
-        :param '**kwargs': keyword arguments passed to window function
+        :param ``**kwargs``: keyword arguments passed to window function
         """
         from timeseries import TimeSeries
         ts_values = self._tseries.values
