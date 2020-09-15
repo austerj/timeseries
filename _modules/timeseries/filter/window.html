@@ -1,0 +1,368 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>timeseries.filter.window &mdash; timeseries 0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home" alt="Documentation Home"> timeseries
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../TimeSeries.html">TimeSeries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../submodules.html">Submodules</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">timeseries</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>timeseries.filter.window</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for timeseries.filter.window</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">warnings</span>
+
+<span class="kn">from</span> <span class="nn">timeseries.errors</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">FilteringWindowError</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">timeseries.filter.weights</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">EvenWeights</span><span class="p">,</span>
+    <span class="n">LinearWeights</span><span class="p">,</span>
+    <span class="n">NoneWeights</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">timeseries.filter.func</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">WindowFunction</span><span class="p">,</span>
+    <span class="n">SeriesFunction</span><span class="p">,</span>
+    <span class="n">CustomWindowFunction</span><span class="p">,</span>
+    <span class="n">SumWindow</span><span class="p">,</span>
+    <span class="n">CustomExponentialSeriesFunction</span><span class="p">,</span>
+    <span class="n">ExponentialMovingAverageSeries</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<div class="viewcode-block" id="_RollingWindow"><a class="viewcode-back" href="../../../submodules/filter.html#timeseries.filter.window._RollingWindow">[docs]</a><span class="k">class</span> <span class="nc">_RollingWindow</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Rolling window class for applying filters to time series.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># map keys to weight classes</span>
+    <span class="n">_WEIGHTS</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;even&#39;</span><span class="p">:</span> <span class="n">EvenWeights</span><span class="p">,</span>
+        <span class="s1">&#39;linear&#39;</span><span class="p">:</span> <span class="n">LinearWeights</span><span class="p">,</span>
+        <span class="s1">&#39;none&#39;</span><span class="p">:</span> <span class="n">NoneWeights</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="c1"># map keys to window function classes</span>
+    <span class="n">_WINDOWFUNCS</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;custom&#39;</span><span class="p">:</span> <span class="n">CustomWindowFunction</span><span class="p">,</span>
+        <span class="s1">&#39;sum&#39;</span><span class="p">:</span> <span class="n">SumWindow</span><span class="p">,</span>
+        <span class="s1">&#39;exponential_custom&#39;</span><span class="p">:</span> <span class="n">CustomExponentialSeriesFunction</span><span class="p">,</span>
+        <span class="s1">&#39;exponential_moving_average&#39;</span><span class="p">:</span> <span class="n">ExponentialMovingAverageSeries</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tseries</span><span class="p">,</span> <span class="n">window_size</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="s1">&#39;even&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize rolling window object.</span>
+
+<span class="sd">        :param tseries: time series object</span>
+<span class="sd">        :param window_size: integer size of rolling window</span>
+<span class="sd">        :param weights: type of weights, defaults to &#39;even&#39;. Current options:</span>
+<span class="sd">            &#39;even&#39; - all points weighted evenly</span>
+<span class="sd">            &#39;linear&#39; - weights increasing linearly from &#39;min_weight&#39; parameter</span>
+<span class="sd">            &#39;none&#39; - no weighting</span>
+<span class="sd">        :param &#39;**kwargs&#39;: keyword arguments passed to weights as parameters</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># check that specified weights are implemented</span>
+        <span class="k">if</span> <span class="n">weights</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_WEIGHTS</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span>
+                <span class="n">f</span><span class="s1">&#39;</span><span class="si">{weights}</span><span class="s1"> is not a valid choice of weights&#39;</span><span class="p">)</span>
+        <span class="c1"># trust user to not modify these</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tseries</span> <span class="o">=</span> <span class="n">tseries</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_weights_key</span> <span class="o">=</span> <span class="n">weights</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_weights</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_WEIGHTS</span><span class="p">[</span><span class="n">weights</span><span class="p">](</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="c1"># window size validated in setter</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">window_size</span> <span class="o">=</span> <span class="n">window_size</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">weights</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_weights_key</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">window_size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_window_size</span>
+
+    <span class="nd">@window_size</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">window_size</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="c1"># convert to float to ensure access to is_integer method</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">flt_value</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;</span><span class="se">\&#39;</span><span class="si">{value}</span><span class="se">\&#39;</span><span class="s1"> is not a valid window size&#39;</span><span class="p">)</span>
+        <span class="c1"># validate numeric window size</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">flt_value</span><span class="o">.</span><span class="n">is_integer</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;window size must be integer&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">flt_value</span> <span class="o">&lt;=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_tseries</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">FilteringWindowError</span><span class="p">(</span>
+                <span class="s1">&#39;window size must be smaller than length of time series&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">flt_value</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s1">&#39;window size must be at least 1&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_window_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">flt_value</span><span class="p">)</span>
+
+<div class="viewcode-block" id="_RollingWindow.get_weights"><a class="viewcode-back" href="../../../submodules/filter.html#timeseries.filter.window._RollingWindow.get_weights">[docs]</a>    <span class="k">def</span> <span class="nf">get_weights</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_weights</span><span class="o">.</span><span class="n">get_weights</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">window_size</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="_RollingWindow._apply_filter"><a class="viewcode-back" href="../../../submodules/filter.html#timeseries.filter.window._RollingWindow._apply_filter">[docs]</a>    <span class="k">def</span> <span class="nf">_apply_filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">window_func</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Apply filter and return time series.</span>
+
+<span class="sd">        :param window_func: windowed function to apply. Current options:</span>
+<span class="sd">            &#39;average&#39; - weighted moving average over window size</span>
+<span class="sd">        :param ``**kwargs``: keyword arguments passed to window function</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">timeseries</span> <span class="k">import</span> <span class="n">TimeSeries</span>
+        <span class="n">ts_values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tseries</span><span class="o">.</span><span class="n">values</span>
+        <span class="c1"># check that specified windowed function is implemented</span>
+        <span class="k">if</span> <span class="n">window_func</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_WINDOWFUNCS</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span>
+                <span class="n">f</span><span class="s1">&#39;</span><span class="si">{window_func}</span><span class="s1"> is not a valid choice of windowed function&#39;</span><span class="p">)</span>
+        <span class="n">_window_func</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_WINDOWFUNCS</span><span class="p">[</span><span class="n">window_func</span><span class="p">](</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="c1"># skip rolling window if window function returns values directly</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">_window_func</span><span class="p">,</span> <span class="n">SeriesFunction</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_weights_key</span> <span class="o">!=</span> <span class="s1">&#39;none&#39;</span><span class="p">:</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                    <span class="s1">&#39;function computes values directly, weights are not used&#39;</span><span class="p">)</span>
+            <span class="n">dates</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tseries</span><span class="o">.</span><span class="n">dates</span>
+            <span class="n">values</span> <span class="o">=</span> <span class="n">_window_func</span><span class="o">.</span><span class="n">apply_to_series</span><span class="p">(</span><span class="n">ts_values</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">_window_func</span><span class="p">,</span> <span class="n">WindowFunction</span><span class="p">):</span>
+            <span class="c1"># initialize weights and dates</span>
+            <span class="n">weights</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_weights</span><span class="p">()</span>
+            <span class="n">dates</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tseries</span><span class="o">.</span><span class="n">dates</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">window_size</span><span class="o">-</span><span class="mi">1</span><span class="p">:]</span>
+            <span class="c1"># create generator for shifted value ranges</span>
+            <span class="n">window_value_ranges</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">ts_values</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">window_size</span><span class="p">]</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_tseries</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">window_size</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="n">values</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">window_values</span> <span class="ow">in</span> <span class="n">window_value_ranges</span><span class="p">:</span>
+                <span class="c1"># weights applied to inputs before window function</span>
+                <span class="n">weighted_values</span> <span class="o">=</span> <span class="p">[</span><span class="n">weights</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">*</span><span class="n">window_values</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                                   <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">window_size</span><span class="p">)]</span>
+                <span class="c1"># this could often be optimized by using caching / update rules</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="n">_window_func</span><span class="o">.</span><span class="n">apply_to_window</span><span class="p">(</span><span class="n">weighted_values</span><span class="p">)</span>
+                <span class="n">values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="s1">&#39;_window_func must subclass WindowFunction or SeriesFunction&#39;</span><span class="p">)</span>
+        <span class="n">tseries</span> <span class="o">=</span> <span class="n">TimeSeries</span><span class="p">(</span><span class="n">dates</span><span class="p">,</span> <span class="n">values</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">tseries</span></div>
+
+<div class="viewcode-block" id="_RollingWindow.custom"><a class="viewcode-back" href="../../../submodules/filter.html#timeseries.filter.window._RollingWindow.custom">[docs]</a>    <span class="k">def</span> <span class="nf">custom</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Apply custom function to weighted values in rolling window and return</span>
+<span class="sd">        time series.</span>
+
+<span class="sd">        :param func: custom function to apply in rolling windows</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_apply_filter</span><span class="p">(</span><span class="s1">&#39;custom&#39;</span><span class="p">,</span> <span class="n">func</span><span class="o">=</span><span class="n">func</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="_RollingWindow.sum"><a class="viewcode-back" href="../../../submodules/filter.html#timeseries.filter.window._RollingWindow.sum">[docs]</a>    <span class="k">def</span> <span class="nf">sum</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sum weighted values in rolling window and return time series.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_apply_filter</span><span class="p">(</span><span class="s1">&#39;sum&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="_RollingWindow.exponential_custom"><a class="viewcode-back" href="../../../submodules/filter.html#timeseries.filter.window._RollingWindow.exponential_custom">[docs]</a>    <span class="k">def</span> <span class="nf">exponential_custom</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="n">alpha</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Apply custom exponentially smoothed function and return time series.</span>
+
+<span class="sd">        :param func: function to apply to series</span>
+<span class="sd">        :param alpha: smoothing factor, must be between 0 and 1</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_apply_filter</span><span class="p">(</span><span class="s1">&#39;exponential_custom&#39;</span><span class="p">,</span> <span class="n">func</span><span class="o">=</span><span class="n">func</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="_RollingWindow.exponential_moving_average"><a class="viewcode-back" href="../../../submodules/filter.html#timeseries.filter.window._RollingWindow.exponential_moving_average">[docs]</a>    <span class="k">def</span> <span class="nf">exponential_moving_average</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alpha</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sum weighted values in rolling window and return time series.</span>
+
+<span class="sd">        :param alpha: smoothing factor, must be between 0 and 1</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_apply_filter</span><span class="p">(</span><span class="s1">&#39;exponential_moving_average&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

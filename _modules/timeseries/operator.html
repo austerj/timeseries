@@ -173,7 +173,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tseries</span> <span class="o">=</span> <span class="n">tseries</span>
 
-    <span class="k">def</span> <span class="nf">_apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="n">arg</span><span class="p">,</span> <span class="n">operation</span><span class="p">,</span> <span class="n">elementwise</span><span class="p">,</span> <span class="n">fill</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="_TimeSeriesOperator._apply"><a class="viewcode-back" href="../../submodules/operator.html#timeseries.operator._TimeSeriesOperator._apply">[docs]</a>    <span class="k">def</span> <span class="nf">_apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="n">arg</span><span class="p">,</span> <span class="n">operation</span><span class="p">,</span> <span class="n">elementwise</span><span class="p">,</span> <span class="n">fill</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Apply function to time series after set operation.</span>
 
@@ -211,9 +211,9 @@
                                               <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">func_value</span>
         <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">OperatorError</span><span class="p">(</span><span class="s1">&#39;applying function after set operation failed&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">OperatorError</span><span class="p">(</span><span class="s1">&#39;applying function after set operation failed&#39;</span><span class="p">)</span></div>
 
-    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="_TimeSeriesOperator._apply_function"><a class="viewcode-back" href="../../submodules/operator.html#timeseries.operator._TimeSeriesOperator._apply_function">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">_apply_function</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">tseries</span><span class="p">,</span> <span class="n">arg</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="n">elementwise</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Apply function to time series and return result, or results as</span>
@@ -246,9 +246,9 @@
         <span class="k">if</span> <span class="n">elementwise</span><span class="p">:</span>
             <span class="n">dates</span> <span class="o">=</span> <span class="n">tseries</span><span class="o">.</span><span class="n">dates</span>
             <span class="k">return</span> <span class="n">TimeSeries</span><span class="p">(</span><span class="n">dates</span><span class="p">,</span> <span class="n">values</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">values</span>
+        <span class="k">return</span> <span class="n">values</span></div>
 
-    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="_TimeSeriesOperator._broadcast"><a class="viewcode-back" href="../../submodules/operator.html#timeseries.operator._TimeSeriesOperator._broadcast">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">_broadcast</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">size</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Return value broadcasted to tuple.</span>
@@ -262,9 +262,9 @@
             <span class="k">raise</span> <span class="n">NumericValueError</span><span class="p">(</span>
                 <span class="s1">&#39;cannot broadcast non-float-convertable value&#39;</span><span class="p">)</span>
         <span class="n">broadcast</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">broadcast_float</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">size</span><span class="p">))</span>
-        <span class="k">return</span> <span class="n">broadcast</span>
+        <span class="k">return</span> <span class="n">broadcast</span></div>
 
-    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="_TimeSeriesOperator._fill_tseries"><a class="viewcode-back" href="../../submodules/operator.html#timeseries.operator._TimeSeriesOperator._fill_tseries">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">_fill_tseries</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">dates</span><span class="p">,</span> <span class="n">tseries</span><span class="p">,</span> <span class="n">fill</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Return time series in specified dates with missing values filled.</span>
@@ -283,7 +283,7 @@
         <span class="c1"># concatenate dates and values</span>
         <span class="n">dates</span> <span class="o">=</span> <span class="n">keep_dates</span> <span class="o">+</span> <span class="n">missing_dates</span>
         <span class="n">values</span> <span class="o">=</span> <span class="n">keep_values</span> <span class="o">+</span> <span class="n">missing_values</span>
-        <span class="k">return</span> <span class="n">TimeSeries</span><span class="p">(</span><span class="n">dates</span><span class="p">,</span> <span class="n">values</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">TimeSeries</span><span class="p">(</span><span class="n">dates</span><span class="p">,</span> <span class="n">values</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="_TimeSeriesOperator.set_to_dates"><a class="viewcode-back" href="../../submodules/operator.html#timeseries.operator._TimeSeriesOperator.set_to_dates">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">set_to_dates</span><span class="p">(</span><span class="nb">set</span><span class="p">):</span>

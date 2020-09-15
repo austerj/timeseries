@@ -163,6 +163,112 @@
             
   <div class="section" id="module-timeseries.operator">
 <span id="operator"></span><h1>operator<a class="headerlink" href="#module-timeseries.operator" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="timeseries.operator._TimeSeriesOperator">
+<em class="property">class </em><code class="sig-prename descclassname">timeseries.operator.</code><code class="sig-name descname">_TimeSeriesOperator</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tseries</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/timeseries/operator.html#_TimeSeriesOperator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.operator._TimeSeriesOperator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Interface class for extending set operations to time series based on dates
+and applying functions to resulting time series.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>tseries</strong> – time series to operate on</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="timeseries.operator._TimeSeriesOperator._apply">
+<code class="sig-name descname">_apply</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">func</span></em>, <em class="sig-param"><span class="n">arg</span></em>, <em class="sig-param"><span class="n">operation</span></em>, <em class="sig-param"><span class="n">elementwise</span></em>, <em class="sig-param"><span class="n">fill</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/timeseries/operator.html#_TimeSeriesOperator._apply"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.operator._TimeSeriesOperator._apply" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply function to time series after set operation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>func</strong> – function to apply to time series</p></li>
+<li><p><strong>arg</strong> – time series or broadcasted argument passed to function</p></li>
+<li><p><strong>operation</strong> – set operation to apply to time series dates</p></li>
+<li><p><strong>elementwise</strong> – flag if function is applied elementwise and should
+return time series</p></li>
+<li><p><strong>fill</strong> – value to fill in missing dates</p></li>
+<li><p><strong>**kwargs</strong> – keyword arguments passed to function</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="timeseries.operator._TimeSeriesOperator._apply_function">
+<em class="property">classmethod </em><code class="sig-name descname">_apply_function</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tseries</span></em>, <em class="sig-param"><span class="n">arg</span></em>, <em class="sig-param"><span class="n">func</span></em>, <em class="sig-param"><span class="n">elementwise</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/timeseries/operator.html#_TimeSeriesOperator._apply_function"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.operator._TimeSeriesOperator._apply_function" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply function to time series and return result, or results as
+timeseries if elementwise.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tseries</strong> – time series to operate on</p></li>
+<li><p><strong>arg</strong> – time series or broadcasted argument passed to function</p></li>
+<li><p><strong>func</strong> – function to apply to time series</p></li>
+<li><p><strong>elementwise</strong> – flag if function is applied elementwise and should
+return time series</p></li>
+<li><p><strong>**kwargs</strong> – keyword arguments passed to function</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="timeseries.operator._TimeSeriesOperator._broadcast">
+<em class="property">static </em><code class="sig-name descname">_broadcast</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span></em>, <em class="sig-param"><span class="n">size</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/timeseries/operator.html#_TimeSeriesOperator._broadcast"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.operator._TimeSeriesOperator._broadcast" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return value broadcasted to tuple.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>value</strong> – float-convertable value</p></li>
+<li><p><strong>size</strong> – size of tuple</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="timeseries.operator._TimeSeriesOperator._fill_tseries">
+<em class="property">classmethod </em><code class="sig-name descname">_fill_tseries</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dates</span></em>, <em class="sig-param"><span class="n">tseries</span></em>, <em class="sig-param"><span class="n">fill</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/timeseries/operator.html#_TimeSeriesOperator._fill_tseries"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.operator._TimeSeriesOperator._fill_tseries" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return time series in specified dates with missing values filled.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tseries</strong> – time series object to extend or contract</p></li>
+<li><p><strong>dates</strong> – dates to keep and fill if missing</p></li>
+<li><p><strong>fill</strong> – value to fill in missing dates</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="timeseries.operator._TimeSeriesOperator.set_to_dates">
+<em class="property">static </em><code class="sig-name descname">set_to_dates</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">set</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/timeseries/operator.html#_TimeSeriesOperator.set_to_dates"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.operator._TimeSeriesOperator.set_to_dates" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert set of dates to chronologically sorted tuples.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="timeseries.operator._TimeSeriesOperator.custom">
+<code class="sig-name descname">custom</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">func</span></em>, <em class="sig-param"><span class="n">arg</span></em>, <em class="sig-param"><span class="n">operation</span><span class="o">=</span><span class="default_value">'intersection'</span></em>, <em class="sig-param"><span class="n">elementwise</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">fill</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/timeseries/operator.html#_TimeSeriesOperator.custom"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.operator._TimeSeriesOperator.custom" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply custom function to time series after set operation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>func</strong> – function to apply to time series</p></li>
+<li><p><strong>arg</strong> – time series or broadcasted argument passed to function</p></li>
+<li><p><strong>operation</strong> – set operation to apply to time series dates, defaults
+to  ‘intersection’</p></li>
+<li><p><strong>elementwise</strong> – flag if function is applied elementwise and should
+return time series, defaults to True</p></li>
+<li><p><strong>fill</strong> – value to fill in missing dates, defaults to 0</p></li>
+<li><p><strong>**kwargs</strong> – keyword arguments passed to function</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 <dl class="py function">
 <dt id="timeseries.operator.add">
 <code class="sig-prename descclassname">timeseries.operator.</code><code class="sig-name descname">add</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">values1</span></em>, <em class="sig-param"><span class="n">values2</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/timeseries/operator.html#add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.operator.add" title="Permalink to this definition">¶</a></dt>

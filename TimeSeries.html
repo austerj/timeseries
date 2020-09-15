@@ -421,6 +421,31 @@ including variable weighting of values and custom functions.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt id="timeseries.TimeSeries._load_data">
+<em class="property">static </em><code class="sig-name descname">_load_data</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dates</span></em>, <em class="sig-param"><span class="n">values</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/timeseries/base.html#TimeSeries._load_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.TimeSeries._load_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Validate inputs and return sorted date-value pairs as dict.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dates</strong> – finite-length iterable of datetime objects</p></li>
+<li><p><strong>values</strong> – finite-length iterable of float-convertable numbers</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="timeseries.TimeSeries._infer_date">
+<em class="property">static </em><code class="sig-name descname">_infer_date</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">date</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/timeseries/base.html#TimeSeries._infer_date"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.TimeSeries._infer_date" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return inferred datetime object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>date</strong> – datetime object or string in ISO format</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt id="timeseries.TimeSeries.get_value">
 <code class="sig-name descname">get_value</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">date</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/timeseries/base.html#TimeSeries.get_value"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timeseries.TimeSeries.get_value" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return value of time series at specified date.</p>
