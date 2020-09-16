@@ -144,19 +144,13 @@ class TimeSeries:
     1970-01-01 00:00:00              1.00
     1970-01-02 00:00:00              4.00
 
-    >>> tseries2 ** tseries
-    date                            value
-    1970-01-01 00:00:00              1.00
-    1970-01-02 00:00:00              4.00
-
     Broadcasting to elementwise operations is supported for float-convertable
     values across these operations.
 
-    >>> (tseries+1) / 2
+    >>> (1+tseries/2) ** (2*tseries2)
     date                            value
-    1970-01-01 00:00:00              1.00
-    1970-01-02 00:00:00              1.50
-    1970-01-03 00:00:00              2.00
+    1970-01-01 00:00:00              2.25
+    1970-01-02 00:00:00             16.00
 
     The set operation and fill values can be chosen by calling methods directly
     and providing arguments.
@@ -168,8 +162,8 @@ class TimeSeries:
 
     The operator attribute allows for even more customizable applications of
     functions, with direct specification of function to apply, set operations
-    and fill values for preprocessing disjoint time series. Aggregation
-    functions can be implemented via the elementwise flag.
+    and fill values for preprocessing time series. Aggregation functions can be
+    implemented via the elementwise flag.
 
     >>> from timeseries.stats import crosscovariance
     >>> tseries.operator.custom(crosscovariance, tseries2, elementwise=False)
@@ -272,8 +266,15 @@ class TimeSeries:
     def __add__(self, other):
         return self.add(other)
 
+    def __radd__(self, other):
+        return self.__add__(other)
+
     def __sub__(self, other):
         return self.subtract(other)
+
+    def __rsub__(self, other):
+        from timeseries.operator import right_subtract
+        return self.operator.custom(right_subtract, other, 'union')
 
     def __mul__(self, other):
         return self.multiply(other)

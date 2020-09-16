@@ -184,6 +184,17 @@ def subtract(values1, values2):
     return differenced_values
 
 
+def right_subtract(values1, values2):
+    """
+    Return element-wise right subtraction of two numeric iterables.
+
+    :param values1: finite-length iterable of float-convertable numbers to
+        subtract
+    :param values2: finite-length iterable of float-convertable numbers
+    """
+    return subtract(values2, values1)
+
+
 def multiply(values1, values2):
     """
     Return element-wise multiplication of two numeric iterables.
