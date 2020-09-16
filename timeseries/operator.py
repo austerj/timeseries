@@ -20,6 +20,8 @@ class _TimeSeriesOperator:
     def __init__(self, tseries):
         """
         Initialize time series operator object.
+
+        :param tseries: time series to operate on
         """
         self.tseries = tseries
 

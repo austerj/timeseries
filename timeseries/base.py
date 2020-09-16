@@ -233,15 +233,15 @@ class TimeSeries:
     def __init__(self, dates, values):
         """
         Initialize time series object.
+
+        :param dates: finite-length iterable of datetime objects
+        :param values: finite-length iterable of float-convertable numbers
         """
         # note: _ prefix indicates internal use, but user could theoretically
         # still directly access and modify / break this
         self._data = self._load_data(dates, values)
 
     def __repr__(self):
-        """
-        Return string representation of time series object.
-        """
         # use explicit 'YYYY-MM-DD HH:MM:SS' format for consistency
         date_format = r'%Y-%m-%d %H:%M:%S'
         data = []
@@ -259,17 +259,9 @@ class TimeSeries:
         return repr_string
 
     def __len__(self):
-        """
-        Return number of entries in time series.
-        """
         return len(self._data)
 
     def __eq__(self, other):
-        """
-        Return True if other time series has the same dates and values.
-
-        :param other: time series object to assess equality against
-        """
         if isinstance(other, TimeSeries):
             equals = self.dates == other.dates and self.values == other.values
         else:
@@ -304,9 +296,6 @@ class TimeSeries:
         return self.operator.custom(right_power, other, 'intersection')
 
     def __getitem__(self, key):
-        """
-        Return time series object indexed from key.
-        """
         try:
             # use existing slice implementation for dates and values
             if isinstance(key, slice):
